@@ -58,11 +58,19 @@ body{display:flex;flex-direction:column;}
 .bso.open{opacity:1;pointer-events:all;}
 .bsbg{position:absolute;inset:0;} .bsbg img{width:100%;height:100%;object-fit:cover;opacity:.2;}
 .bsc{position:relative;z-index:1;text-align:center;width:100%;max-width:340px;}
-.bcw{width:200px;height:200px;margin:0 auto 20px;}
-.bc{width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--ac2),var(--ac));transform:scale(1);transition:transform 4s ease-in-out,opacity .5s;display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(58,125,87,.4);}
-.bc.inhale{transform:scale(1.35);} .bc.exhale{transform:scale(.72);opacity:.7;} .bc.hold{transform:scale(1.3);opacity:.85;}
-.bp{color:#fff;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;}
-.bco{color:#fff;font-size:38px;font-weight:700;}
+.bcw{width:220px;height:220px;margin:0 auto 20px;position:relative;display:flex;align-items:center;justify-content:center;}
+.bc-ring{position:absolute;inset:-18px;border-radius:50%;border:2px solid rgba(90,173,124,.35);opacity:0;transform:scale(1);}
+.bc-ring2{position:absolute;inset:-36px;border-radius:50%;border:1px solid rgba(90,173,124,.18);opacity:0;transform:scale(1);}
+@keyframes ring-pulse{0%{opacity:.7;transform:scale(1);}100%{opacity:0;transform:scale(1.25);}}
+@keyframes ring-pulse2{0%{opacity:.45;transform:scale(1);}100%{opacity:0;transform:scale(1.35);}}
+.bc-ring.active{animation:ring-pulse 2.2s ease-out infinite;}
+.bc-ring2.active{animation:ring-pulse2 2.2s ease-out .4s infinite;}
+.bc{width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--ac2),var(--ac));transform:scale(1);transition:transform var(--bc-dur,4s) ease-in-out,opacity var(--bc-dur,4s) ease-in-out,box-shadow .6s;display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(58,125,87,.4);position:relative;z-index:1;}
+.bc.inhale{transform:scale(1.32);box-shadow:0 0 90px rgba(58,125,87,.65);}
+.bc.exhale{transform:scale(.72);opacity:.7;box-shadow:0 0 30px rgba(58,125,87,.2);}
+.bc.hold{transform:scale(1.28);box-shadow:0 0 80px rgba(58,125,87,.55);}
+.bp{color:#fff;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:.3px;}
+.bco{color:#fff;font-size:42px;font-weight:700;line-height:1;margin-top:2px;}
 .bpr{width:100%;height:3px;background:rgba(255,255,255,.3);border-radius:2px;overflow:hidden;margin:14px 0;}
 .bpb{height:100%;background:#fff;border-radius:2px;transition:width .5s linear;}
 .ba{display:flex;gap:10px;justify-content:center;margin-top:12px;}
@@ -177,6 +185,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
       <div style="flex:1"><div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div><div style="font-size:10px;color:var(--tx2)"><span id="xp-cur">0</span> / <span id="xp-nxt">100</span> XP</div></div>
     </div>
     <div class="fc" id="fact-card" onclick="nextFact()"><div class="ft" id="ft"></div><div class="fs" id="fs"></div></div>
+    <button onclick="App.shareProgress()" style="width:100%;background:var(--surface);border:1.5px solid var(--br);border-radius:13px;padding:11px;font-size:13px;font-weight:600;color:var(--tx2);cursor:pointer;margin-bottom:4px;font-family:'Inter',sans-serif;">📤 Compartir mi progreso</button>
     <div class="st">Comenzar ahora</div>
     <div class="card" onclick="App.startBreath('wim-hof')"><div class="cr"><div class="ci">🌬️</div><div class="cb"><div class="ct">Método Wim Hof</div><div class="cd">Activación & energía · 3 rondas</div></div><span class="badge">Popular</span></div></div>
     <div class="card" onclick="App.startBreath('coherence')"><div class="cr"><div class="ci">💚</div><div class="cb"><div class="ct">Coherencia Cardíaca</div><div class="cd">5.5s inhala · 5.5s exhala</div></div></div></div>
@@ -184,11 +193,31 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
   </div>
   <div class="sec" style="padding-top:0">
     <div class="st">Los 8 Pilares</div>
-    <div id="pillars-locked" style="display:none;background:var(--surface);border:1.5px solid var(--br);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px">
-      <div style="font-size:32px;margin-bottom:8px">🔒</div>
-      <div style="font-weight:700;font-size:15px;color:var(--tx);margin-bottom:6px">Contenido Premium</div>
-      <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">Los 8 pilares, la Academia completa y el Plan 30 días forman parte de INSPIRAPP Premium.</div>
-      <button class="bf" onclick="App.openUnlock()" style="width:100%">🔓 Desbloquear — 9,99€</button>
+    <div id="pillars-locked" style="display:none;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:20px;padding:22px 18px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-20px;right:-20px;font-size:90px;opacity:.08;line-height:1">⚡</div>
+      <div style="position:relative">
+        <div style="display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:11px;color:#fff;font-weight:600;margin-bottom:10px;letter-spacing:.5px">PREMIUM</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#fff;margin-bottom:6px;line-height:1.2">Los 8 Pilares del Biohacking</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.85);margin-bottom:16px;line-height:1.5">Academia · Plan 30 días · Acceso de por vida</div>
+        <div style="display:flex;justify-content:center;gap:16px;margin-bottom:18px">
+          <div style="text-align:center">
+            <div style="font-size:20px;font-weight:700;color:#fff">8</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.75)">Pilares</div>
+          </div>
+          <div style="width:1px;background:rgba(255,255,255,.2)"></div>
+          <div style="text-align:center">
+            <div style="font-size:20px;font-weight:700;color:#fff">12</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.75)">Lecciones</div>
+          </div>
+          <div style="width:1px;background:rgba(255,255,255,.2)"></div>
+          <div style="text-align:center">
+            <div style="font-size:20px;font-weight:700;color:#fff">30</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.75)">Días</div>
+          </div>
+        </div>
+        <button onclick="App.openUnlock()" style="width:100%;background:#fff;color:var(--ac);border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">🔓 Desbloquear — 9,99€</button>
+        <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:8px">Pago único · Sin suscripción</div>
+      </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px" id="pillars-grid"></div>
     <div class="st">Tu racha — <span id="sc2">0</span> días</div>
@@ -278,6 +307,42 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 
 <div class="toast" id="toast"></div>
 
+<!-- MODAL BIENVENIDA -->
+<div class="mo" id="mo-welcome">
+  <div class="mo-c" style="padding-bottom:max(24px,env(safe-area-inset-bottom))">
+    <div class="mh2"></div>
+    <div style="text-align:center;padding:8px 20px 20px">
+      <div style="font-size:52px;margin-bottom:12px">🌿</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--tx);margin-bottom:6px">Bienvenido a INSPIRAPP</div>
+      <div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:22px">Tu app de respiración y biohacking.<br>En 3 pasos, empieza hoy.</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:22px;text-align:left">
+        <div style="display:flex;align-items:center;gap:14px;background:var(--s2);border-radius:14px;padding:12px 14px">
+          <div style="font-size:28px;flex-shrink:0">🫁</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;color:var(--tx)">Respira</div>
+            <div style="font-size:12px;color:var(--tx2);margin-top:2px">Elige un protocolo de respiración y hazlo tu hábito diario</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;background:var(--s2);border-radius:14px;padding:12px 14px">
+          <div style="font-size:28px;flex-shrink:0">🏆</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;color:var(--tx)">Completa retos</div>
+            <div style="font-size:12px;color:var(--tx2);margin-top:2px">Pequeños retos diarios para construir hábitos que duran</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;background:var(--s2);border-radius:14px;padding:12px 14px">
+          <div style="font-size:28px;flex-shrink:0">⚡</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;color:var(--tx)">Desbloquea Premium</div>
+            <div style="font-size:12px;color:var(--tx2);margin-top:2px">8 pilares, 12 lecciones y Plan 30 días por un único pago de 9,99€</div>
+          </div>
+        </div>
+      </div>
+      <button class="bf" onclick="App.closeWelcome()" style="margin-top:0">¡Empezar ahora →</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL UNLOCK -->
 <div class="mo" id="mo-unlock">
   <div class="mo-c">
@@ -291,7 +356,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
         ✅ Plan 30 Días interactivo<br>
         ✅ Acceso de por vida · Sin suscripción
       </div>
-      <a href="https://danimij.gumroad.com/l/inspirapp" target="_blank" class="bf" style="display:block;width:100%;margin-bottom:14px;text-decoration:none;text-align:center">🛒 Comprar por 9,99€ →</a>
+      <a href="https://danimij.gumroad.com/l/wpsxro" target="_blank" class="bf" style="display:block;width:100%;margin-bottom:14px;text-decoration:none;text-align:center">🛒 Comprar por 9,99€ →</a>
       <div style="font-size:12px;color:var(--tx2);margin-bottom:10px">¿Ya tienes un código? Introdúcelo aquí:</div>
       <div style="display:flex;gap:8px">
         <input id="unlock-input" type="text" placeholder="INSPR-XXXX-XXXX" style="flex:1;padding:10px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:13px;font-family:inherit" oninput="this.value=this.value.toUpperCase()">
@@ -317,7 +382,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
   <div class="bsbg"><img id="bsbg" alt=""></div>
   <div class="bsc">
     <div style="color:#fff;font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:16px;opacity:.9" id="bst"></div>
-    <div class="bcw"><div class="bc" id="bc"><div style="text-align:center"><div class="bp" id="bph">Prepárate</div><div class="bco" id="bcn">—</div></div></div></div>
+    <div class="bcw"><div class="bc-ring" id="bc-ring"></div><div class="bc-ring2" id="bc-ring2"></div><div class="bc" id="bc"><div style="text-align:center"><div class="bp" id="bph">Prepárate</div><div class="bco" id="bcn">—</div></div></div></div>
     <div style="color:rgba(255,255,255,.7);font-size:12px" id="brd"></div>
     <div class="bpr"><div class="bpb" id="bpb" style="width:0%"></div></div>
     <div style="color:#fff;font-size:12px;opacity:.75;margin-bottom:8px" id="binf"></div>
@@ -376,6 +441,13 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
     <div class="mb">
       <p style="font-size:12px;color:var(--tx2);margin-bottom:10px">Tema de color</p>
       <div class="chips"><div class="chip" onclick="App.theme('forest')">🌿 Bosque</div><div class="chip" onclick="App.theme('ocean')">🌊 Océano</div><div class="chip" onclick="App.theme('sunset')">🌅 Atardecer</div><div class="chip" onclick="App.theme('lavender')">💜 Lavanda</div></div>
+      <div class="dv"></div>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:8px">Recordatorio diario</p>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <input type="time" id="notif-time" value="08:00" style="flex:1;padding:9px 12px;border-radius:9px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:14px;font-family:'Inter',sans-serif">
+        <button class="bf" onclick="App.enableNotif()" style="width:auto;padding:9px 16px;margin:0;font-size:13px">Activar</button>
+      </div>
+      <div id="notif-status" style="font-size:11px;color:var(--tx2);margin-bottom:14px"></div>
       <div class="dv"></div>
       <button class="bf alt" onclick="App.resetData()">🗑️ Borrar historial</button>
     </div>
@@ -659,7 +731,14 @@ function tickB(){
     var recs=t.rec.d;circ.className='bc inhale';ph.textContent=t.rec.n;
     (function rd2(){if(!BS.running)return;cn.textContent=recs;if(recs<=0){BS.rec=false;nextRound();return;}recs--;BS.to=setTimeout(rd2,1000);})();return;
   }
-  var p=t.phases[BS.pi];circ.className='bc '+p.t;ph.textContent=p.n;rd.textContent='Resp '+(BS.cycle+1)+' / '+t.cycles+(t.rounds?' · R'+BS.round:'');
+  var p=t.phases[BS.pi];
+  var dur=Math.max(0.5,p.d);
+  circ.style.setProperty('--bc-dur',dur+'s');
+  circ.className='bc '+p.t;
+  var ring=document.getElementById('bc-ring'),ring2=document.getElementById('bc-ring2');
+  if(p.t==='hold'){ring.classList.add('active');ring2.classList.add('active');}
+  else{ring.classList.remove('active');ring2.classList.remove('active');}
+  ph.textContent=p.n;rd.textContent='Resp '+(BS.cycle+1)+' / '+t.cycles+(t.rounds?' · R'+BS.round:'');
   if(p.d>2){var cs=Math.round(p.d);(function cdd(){if(!BS.running)return;cn.textContent=cs;if(cs<=0){advB();return;}cs--;BS.to=setTimeout(cdd,1000);})();}
   else{cn.textContent='';BS.to=setTimeout(advB,p.d*1000);}
 }
@@ -861,6 +940,93 @@ function applyPremiumGates(){
   document.getElementById('academia-locked').style.display=p?'none':'block';
   document.getElementById('lessons-list').style.display=p?'block':'none';
 }
+// NOTIFICACIONES
+function enableNotif(){
+  var t=document.getElementById('notif-time').value||'08:00';
+  var st=document.getElementById('notif-status');
+  if(!('Notification' in window)){st.textContent='Tu navegador no soporta notificaciones.';return;}
+  Notification.requestPermission().then(function(p){
+    if(p==='granted'){
+      localStorage.setItem('notif-hour',t);
+      st.style.color='var(--ac)';
+      st.textContent='✓ Recordatorio activado a las '+t;
+    } else {
+      st.style.color='#e05';
+      st.textContent='Permiso denegado. Actívalo en ajustes del navegador.';
+    }
+  });
+}
+function checkDailyNotif(){
+  var h=localStorage.getItem('notif-hour');
+  if(!h||Notification.permission!=='granted')return;
+  var last=localStorage.getItem('notif-last');
+  var today=new Date().toDateString();
+  if(last===today)return;
+  var parts=h.split(':');
+  var now=new Date();
+  var notifH=parseInt(parts[0]),notifM=parseInt(parts[1]);
+  if(now.getHours()>notifH||(now.getHours()===notifH&&now.getMinutes()>=notifM)){
+    new Notification('INSPIRAPP 🌿',{body:'Es hora de tu sesión de respiración. '+((S.streak||0)+' días de racha — ¡no lo rompas!'),icon:'./icon-192.png'});
+    localStorage.setItem('notif-last',today);
+  }
+}
+
+// COMPARTIR PROGRESO
+function shareProgress(){
+  var c=document.createElement('canvas');
+  c.width=800;c.height=800;
+  var ctx=c.getContext('2d');
+  var ac=getComputedStyle(document.documentElement).getPropertyValue('--ac').trim()||'#3a7d57';
+  var ac2=getComputedStyle(document.documentElement).getPropertyValue('--ac2').trim()||'#5aad7c';
+  // Fondo
+  var grd=ctx.createLinearGradient(0,0,800,800);
+  grd.addColorStop(0,'#1e3528');grd.addColorStop(1,'#3a7d57');
+  ctx.fillStyle=grd;ctx.fillRect(0,0,800,800);
+  // Círculo decorativo
+  ctx.beginPath();ctx.arc(680,120,180,0,Math.PI*2);
+  ctx.fillStyle='rgba(90,173,124,.12)';ctx.fill();
+  ctx.beginPath();ctx.arc(680,120,120,0,Math.PI*2);
+  ctx.fillStyle='rgba(90,173,124,.1)';ctx.fill();
+  // Logo
+  ctx.font='bold 28px Inter,sans-serif';ctx.fillStyle='rgba(255,255,255,.6)';
+  ctx.fillText('INSPIRAPP',60,80);
+  // Emoji
+  ctx.font='80px serif';ctx.fillText('🌿',60,200);
+  // Racha
+  ctx.font='bold 110px Inter,sans-serif';ctx.fillStyle='#ffffff';
+  ctx.fillText((S.streak||0),60,340);
+  ctx.font='28px Inter,sans-serif';ctx.fillStyle='rgba(255,255,255,.75)';
+  ctx.fillText('días de racha',60,390);
+  // Divisor
+  ctx.fillStyle='rgba(255,255,255,.15)';ctx.fillRect(60,420,680,1);
+  // Stats
+  var stats=[['🏃',S.sessions||0,'sesiones'],['⭐',S.xp||0,'XP'],['💨',S.bestBolt||0,'BOLT']];
+  stats.forEach(function(s,i){
+    var x=60+i*230;
+    ctx.font='36px serif';ctx.fillText(s[0],x,490);
+    ctx.font='bold 52px Inter,sans-serif';ctx.fillStyle='#ffffff';
+    ctx.fillText(s[1],x,560);
+    ctx.font='20px Inter,sans-serif';ctx.fillStyle='rgba(255,255,255,.6)';
+    ctx.fillText(s[2],x,592);
+  });
+  // CTA
+  ctx.fillStyle='rgba(255,255,255,.1)';
+  roundRect(ctx,60,640,680,100,20);ctx.fill();
+  ctx.font='bold 22px Inter,sans-serif';ctx.fillStyle='rgba(255,255,255,.9)';
+  ctx.fillText('@instintosaludable · INSPIRAPP',100,698);
+  ctx.font='18px Inter,sans-serif';ctx.fillStyle='rgba(255,255,255,.55)';
+  ctx.fillText('danimij.gumroad.com/l/wpsxro',100,728);
+  // Share
+  c.toBlob(function(blob){
+    var url=URL.createObjectURL(blob);
+    if(navigator.share){
+      navigator.share({title:'Mi progreso en INSPIRAPP',text:(S.streak||0)+' días de racha 🌿',files:[new File([blob],'inspirapp-progreso.png',{type:'image/png'})]}).catch(function(){dl(url);});
+    } else {dl(url);}
+  },'image/png');
+}
+function dl(url){var a=document.createElement('a');a.href=url;a.download='inspirapp-progreso.png';a.click();}
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+
 function tryUnlock(){
   var code=(document.getElementById('unlock-input').value||'').trim().toUpperCase();
   var msg=document.getElementById('unlock-msg');
@@ -972,7 +1138,10 @@ window.App={
   completeLesson:function(id){S.lessonsDone=S.lessonsDone||[];if(!S.lessonsDone.includes(id)){S.lessonsDone.push(id);S.xp=(S.xp||0)+15;saveS();updateUI();tip('Lección completada! +15 XP 📚');}cm('mo-lesson');renderLessons();renderPillars();},
   showPlan30Day:showPlan30Day,
   completePlan30Day:completePlan30Day,
+  closeWelcome:function(){cm('mo-welcome');localStorage.setItem('inspi-welcomed','1');},
   openUnlock:function(){om('mo-unlock');document.getElementById('unlock-msg').textContent='';document.getElementById('unlock-input').value='';},
+  enableNotif:enableNotif,
+  shareProgress:shareProgress,
   tryUnlock:tryUnlock,
   openProt:function(id){
     var p=PROTOCOLS.filter(function(x){return x.id===id;})[0];if(!p)return;
@@ -995,6 +1164,8 @@ window.startBreath=startBreath;window.startYoga=startYoga;
   nextFact();setInterval(nextFact,12000);
   renderBreaths();renderYoga();renderProtocols();renderBadges();renderCold();renderRetos();renderPillars();renderPlan30();applyPremiumGates();
   updateUI();
+  if(!localStorage.getItem('inspi-welcomed')){setTimeout(function(){om('mo-welcome');},600);}
+  checkDailyNotif();
   document.querySelectorAll('.mo').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});});
   document.addEventListener('click',function(){if(AC&&AC.state==='suspended')AC.resume();},{once:true});
   document.addEventListener('touchstart',function(){if(AC&&AC.state==='suspended')AC.resume();},{once:true});
