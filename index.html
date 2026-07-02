@@ -184,6 +184,12 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
   </div>
   <div class="sec" style="padding-top:0">
     <div class="st">Los 8 Pilares</div>
+    <div id="pillars-locked" style="display:none;background:var(--surface);border:1.5px solid var(--br);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px">
+      <div style="font-size:32px;margin-bottom:8px">🔒</div>
+      <div style="font-weight:700;font-size:15px;color:var(--tx);margin-bottom:6px">Contenido Premium</div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">Los 8 pilares, la Academia completa y el Plan 30 días forman parte de INSPIRAPP Premium.</div>
+      <button class="bf" onclick="App.openUnlock()" style="width:100%">🔓 Desbloquear — 9,99€</button>
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px" id="pillars-grid"></div>
     <div class="st">Tu racha — <span id="sc2">0</span> días</div>
     <div class="sg" id="sgrid"></div>
@@ -218,6 +224,12 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
     <div class="card" onclick="App.openCold()"><div class="cr"><div class="ci">🧊</div><div class="cb"><div class="ct">Ducha Fría</div><div class="cd">Protocolo Wim Hof</div></div></div></div>
     <div id="prot-list"></div>
     <div class="st" style="margin-top:16px">📅 Plan 30 Días</div>
+    <div id="plan30-locked" style="display:none;background:var(--surface);border:1.5px solid var(--br);border-radius:16px;padding:18px;text-align:center">
+      <div style="font-size:28px;margin-bottom:6px">🔒</div>
+      <div style="font-weight:700;font-size:14px;color:var(--tx);margin-bottom:5px">Plan Premium</div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:12px">30 días de hábitos con ciencia detrás. Desbloquea con INSPIRAPP Premium.</div>
+      <button class="bf" onclick="App.openUnlock()" style="width:100%">🔓 Desbloquear — 9,99€</button>
+    </div>
     <div id="plan30-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px"></div>
     <div id="plan30-detail" style="display:none;background:var(--surface);border-radius:14px;padding:14px;margin-top:4px;border:1.5px solid var(--br)"></div>
   </div>
@@ -235,6 +247,13 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 <section id="sc-aprende" class="sc">
   <div class="sec">
     <div class="st">📚 Academia INSPIRAPP</div>
+    <div id="academia-locked" style="display:none;background:var(--surface);border:1.5px solid var(--br);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px">
+      <div style="font-size:32px;margin-bottom:8px">🔒</div>
+      <div style="font-weight:700;font-size:15px;color:var(--tx);margin-bottom:6px">Academia Premium</div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">12 lecciones sobre los 8 pilares del biohacking con ciencia detrás de cada una. Acceso de por vida.</div>
+      <button class="bf" onclick="App.openUnlock()" style="width:100%;margin-bottom:8px">🔓 Desbloquear — 9,99€</button>
+      <div style="font-size:11px;color:var(--tx2)">Pago único · Sin suscripción · Acceso inmediato</div>
+    </div>
     <div id="lessons-list"></div>
     <div class="st" style="margin-top:8px">Tu progreso</div>
     <div class="stat-grid">
@@ -258,6 +277,30 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 </nav>
 
 <div class="toast" id="toast"></div>
+
+<!-- MODAL UNLOCK -->
+<div class="mo" id="mo-unlock">
+  <div class="mo-c">
+    <div class="mo-h"><span id="unlock-title">🔓 INSPIRAPP Premium</span><button class="mc" onclick="App.cm('mo-unlock')">✕</button></div>
+    <div style="text-align:center;padding:8px 0 16px">
+      <div style="font-size:40px;margin-bottom:10px">⚡</div>
+      <div style="font-weight:700;font-size:16px;color:var(--tx);margin-bottom:8px">Desbloquea todo el contenido</div>
+      <div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:16px">
+        ✅ Los 8 Pilares del Biohacking<br>
+        ✅ Academia completa — 12 lecciones<br>
+        ✅ Plan 30 Días interactivo<br>
+        ✅ Acceso de por vida · Sin suscripción
+      </div>
+      <a href="https://danimij.gumroad.com/l/inspirapp" target="_blank" class="bf" style="display:block;width:100%;margin-bottom:14px;text-decoration:none;text-align:center">🛒 Comprar por 9,99€ →</a>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:10px">¿Ya tienes un código? Introdúcelo aquí:</div>
+      <div style="display:flex;gap:8px">
+        <input id="unlock-input" type="text" placeholder="INSPR-XXXX-XXXX" style="flex:1;padding:10px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:13px;font-family:inherit" oninput="this.value=this.value.toUpperCase()">
+        <button class="bf" onclick="App.tryUnlock()" style="padding:10px 16px;flex-shrink:0">✓</button>
+      </div>
+      <div id="unlock-msg" style="font-size:12px;margin-top:8px;min-height:18px"></div>
+    </div>
+  </div>
+</div>
 
 <!-- iOS INSTALL BANNER -->
 <div id="ios-banner" style="display:none;position:fixed;bottom:70px;left:12px;right:12px;z-index:400;background:var(--surface);border:1.5px solid var(--br);border-radius:18px;padding:14px 16px;box-shadow:0 4px 24px rgba(0,0,0,.18);display:none;align-items:center;gap:12px">
@@ -479,6 +522,9 @@ var LESSONS=[
   {id:'l12',title:'Plan de 30 Días',icon:'📅',sub:'Semana a semana',content:'Semana 1 — Luz y Circadiano: sol matutino sin gafas, bombillas ámbar de noche, cena antes de las 19:30h, grounding 20 min, coherencia cardíaca 5 min tras el sol. Semana 2 — Frío y Hormesis: ducha fría progresiva (30s→90s), Wim Hof en ayunas antes de la ducha, desayuno proteico en la 1ª hora. Semana 3 — Nutrición y Rendimiento: ayuno 16:8, entrenamiento en ayunas, Kapalabhati sustituyendo el café, router apagado de noche. Semana 4 — Integración: diseña tu protocolo mañana y noche definitivo, auditoría del entorno, comparte una técnica con alguien.',keys:['Semana 1: Luz · Semana 2: Frío · Semana 3: Nutrición','No intentes todo el día 1 — progresión es la clave','Mide el BOLT cada 7 días para ver tu progreso']}
 ];
 
+// PREMIUM CODES — generated for Gumroad delivery
+var PREMIUM_CODES=['INSPR-A3K7-M2PX','INSPR-B8L1-N9QZ','INSPR-C4W5-P7RT','INSPR-D2J6-K3YV','INSPR-E9H0-F6UW','INSPR-F1M4-G8SD','INSPR-G7N2-H1LC','INSPR-H5P8-J4BT','INSPR-I3Q9-K7AE','INSPR-J6R1-L2NF','INSPR-K8S3-M5OG','INSPR-L2T7-N0PH','INSPR-M9U4-O3QI','INSPR-N1V6-P8RJ','INSPR-O7W2-Q1SK','INSPR-P4X8-R6TL','INSPR-Q0Y3-S2UM','INSPR-R5Z9-T7VN','INSPR-S1A4-U3WO','INSPR-T6B0-V8XP','INSPR-U2C7-W4YQ','INSPR-V8D3-X9ZR','INSPR-W5E1-Y2AS','INSPR-X3F6-Z7BT','INSPR-Y9G2-A4CU','INSPR-Z1H8-B6DV','INSPR-A7I4-C3EW','INSPR-B2J9-D8FX','INSPR-C6K5-E1GY','INSPR-D4L0-F7HZ','INSPR-E8M3-G2IA','INSPR-F1N7-H9JB','INSPR-G5O2-I4KC','INSPR-H3P6-J0LD','INSPR-I9Q1-K5ME','INSPR-J4R8-L3NF','INSPR-K0S5-M7OG','INSPR-L6T2-N1PH','INSPR-M3U9-O6QI','INSPR-N8V4-P2RJ','INSPR-O2W0-Q9SK','INSPR-P7X6-R4TL','INSPR-Q1Y3-S8UM','INSPR-R9Z7-T1VN','INSPR-S4A2-U5WO','INSPR-T0B8-V3XP','INSPR-U6C4-W9YQ','INSPR-V3D1-X6ZR','INSPR-W8E7-Y0AS','INSPR-X2F4-Z5BT'];
+
 var FACTS=[
   {t:'Respirar por la nariz produce óxido nítrico, que mejora la absorción de O₂ un 18% respecto a respirar por la boca.',s:'— James Nestor, Breath (2020)'},
   {t:'La exposición al frío 11 min/semana aumenta la dopamina un 250% y la norepinefrina un 300%. Los efectos duran horas.',s:'— Andrew Huberman, Stanford 2021'},
@@ -559,7 +605,7 @@ function xpInLevel(xp){var lv=calcLevel(xp);var base=XP_LEVELS[lv-1]||0;return x
 function xpLevelSize(xp){var lv=calcLevel(xp);var base=XP_LEVELS[lv-1]||0;var next=xpForNext(xp);return next-base;}
 
 // STATE
-var S={sessions:0,streak:0,lastDate:null,bestBolt:0,lastMood:0,history:[],wim:0,yoga:0,cold:0,uniq:[],totalMin:0,xp:0,wimWeek:0,yogaWeek:0,coldWeek:0,lessonsDone:[]};
+var S={sessions:0,streak:0,lastDate:null,bestBolt:0,lastMood:0,history:[],wim:0,yoga:0,cold:0,uniq:[],totalMin:0,xp:0,wimWeek:0,yogaWeek:0,coldWeek:0,lessonsDone:[],premium:false,usedCodes:[],plan30done:[]};
 function loadS(){try{Object.assign(S,JSON.parse(localStorage.getItem('inspirapp-v1')||'{}'));}catch(e){}}
 function saveS(){try{localStorage.setItem('inspirapp-v1',JSON.stringify(S));}catch(e){}}
 
@@ -802,6 +848,34 @@ function renderMusic(){
   var tracks=[{id:'forest',i:'🌲',n:'Bosque Profundo',d:'Naturaleza + tonos'},{id:'ocean',i:'🌊',n:'Océano',d:'Olas y frecuencias bajas'},{id:'om',i:'🕉️',n:'Om 136 Hz',d:'Frecuencia de la Tierra'},{id:'396hz',i:'🎵',n:'Solfeggio 396 Hz',d:'Libera el miedo'},{id:'528hz',i:'💚',n:'Solfeggio 528 Hz',d:'Frecuencia del amor'},{id:'wind',i:'🍃',n:'Viento',d:'Brisa y tonos aéreos'}];
   document.getElementById('mlist').innerHTML=tracks.map(function(t){return '<button class="mb-btn" data-id="'+t.id+'" onclick="playTrack(\''+t.id+'\')" style="display:flex;align-items:center;gap:10px;padding:11px;border-radius:11px;background:var(--bg2);margin-bottom:7px;border:1.5px solid transparent;width:100%;text-align:left;cursor:pointer;font-family:Inter,sans-serif"><div style="width:38px;height:38px;border-radius:50%;background:var(--ac);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+t.i+'</div><div style="flex:1"><div style="font-weight:600;font-size:13px;color:var(--tx)">'+t.n+'</div><div style="font-size:11px;color:var(--tx2)">'+t.d+'</div></div></button>';}).join('')+'<button class="bf alt" onclick="stopMusic()" style="margin-top:4px">⏹ Detener música</button>';
 }
+function applyPremiumGates(){
+  var p=S.premium;
+  // Pilares
+  document.getElementById('pillars-locked').style.display=p?'none':'block';
+  document.getElementById('pillars-grid').style.display=p?'grid':'none';
+  // Plan 30
+  document.getElementById('plan30-locked').style.display=p?'none':'block';
+  document.getElementById('plan30-grid').style.display=p?'grid':'none';
+  document.getElementById('plan30-detail').style.display='none';
+  // Academia
+  document.getElementById('academia-locked').style.display=p?'none':'block';
+  document.getElementById('lessons-list').style.display=p?'block':'none';
+}
+function tryUnlock(){
+  var code=(document.getElementById('unlock-input').value||'').trim().toUpperCase();
+  var msg=document.getElementById('unlock-msg');
+  if(!code){msg.style.color='var(--tx2)';msg.textContent='Introduce tu código';return;}
+  if((S.usedCodes||[]).includes(code)){msg.style.color='#e05';msg.textContent='Este código ya fue usado';return;}
+  if(PREMIUM_CODES.includes(code)){
+    S.premium=true;
+    S.usedCodes=(S.usedCodes||[]).concat([code]);
+    saveS();
+    msg.style.color='var(--ac)';msg.textContent='✓ ¡Acceso desbloqueado!';
+    setTimeout(function(){cm('mo-unlock');applyPremiumGates();renderPillars();renderPlan30();renderLessons();tip('🎉 Premium desbloqueado — bienvenido!');},900);
+  } else {
+    msg.style.color='#e05';msg.textContent='Código inválido. Comprueba que lo copiaste bien.';
+  }
+}
 function renderPlan30(){
   var done=S.plan30done||[];
   var grid=document.getElementById('plan30-grid');
@@ -898,6 +972,8 @@ window.App={
   completeLesson:function(id){S.lessonsDone=S.lessonsDone||[];if(!S.lessonsDone.includes(id)){S.lessonsDone.push(id);S.xp=(S.xp||0)+15;saveS();updateUI();tip('Lección completada! +15 XP 📚');}cm('mo-lesson');renderLessons();renderPillars();},
   showPlan30Day:showPlan30Day,
   completePlan30Day:completePlan30Day,
+  openUnlock:function(){om('mo-unlock');document.getElementById('unlock-msg').textContent='';document.getElementById('unlock-input').value='';},
+  tryUnlock:tryUnlock,
   openProt:function(id){
     var p=PROTOCOLS.filter(function(x){return x.id===id;})[0];if(!p)return;
     document.getElementById('pt').textContent=p.icon+' '+p.name;
@@ -917,7 +993,7 @@ window.startBreath=startBreath;window.startYoga=startYoga;
   document.getElementById('hd').textContent=new Date().toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'});
   var url=NATURE[Math.floor(Math.random()*NATURE.length)];var img=document.getElementById('hero-img');var ii=new Image();ii.onload=function(){img.src=url;setTimeout(function(){img.classList.add('ld');},50);};ii.src=url;
   nextFact();setInterval(nextFact,12000);
-  renderBreaths();renderYoga();renderProtocols();renderBadges();renderCold();renderRetos();renderPillars();renderPlan30();
+  renderBreaths();renderYoga();renderProtocols();renderBadges();renderCold();renderRetos();renderPillars();renderPlan30();applyPremiumGates();
   updateUI();
   document.querySelectorAll('.mo').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});});
   document.addEventListener('click',function(){if(AC&&AC.state==='suspended')AC.resume();},{once:true});
