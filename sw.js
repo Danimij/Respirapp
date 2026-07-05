@@ -1,4 +1,4 @@
-const CACHE = "respirapp-v1";
+const CACHE = "respirapp-v3";
 const ASSETS = ["./index.html", "./manifest.json"];
 
 self.addEventListener("install", e => {
@@ -13,8 +13,16 @@ self.addEventListener("activate", e => {
   self.clients.claim();
 });
 
+// Network-first: always try the live version, fall back to cache only offline.
 self.addEventListener("fetch", e => {
+  if (e.request.method !== "GET") return;
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(e.request)
+      .then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
+        return res;
+      })
+      .catch(() => caches.match(e.request).then(c => c || caches.match("./index.html")))
   );
 });
