@@ -22,7 +22,7 @@ body{display:flex;flex-direction:column;}
 .ib{width:36px;height:36px;border:none;background:var(--bg2);border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--tx2);}
 #nav{display:flex;background:var(--surface);border-top:1px solid var(--br);flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom));}
 .nb{flex:1;border:none;background:none;cursor:pointer;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--tx2);font-size:9px;font-family:'Inter',sans-serif;font-weight:500;}
-.nb .ni{font-size:20px;transition:transform .2s;} .nb.active{color:var(--ac);} .nb.active .ni{transform:scale(1.15);}
+.nb .ni{width:22px;height:22px;display:flex;align-items:center;justify-content:center;transition:transform .2s;} .nb.active{color:var(--ac);} .nb.active .ni{transform:scale(1.15);}
 #main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
 .sc{display:none;min-height:100%;} .sc.active{display:block;}
 .hero{width:100%;height:200px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--bg2),var(--ac2));}
@@ -56,6 +56,10 @@ body{display:flex;flex-direction:column;}
 .xb{width:32px;height:32px;border:none;background:var(--bg2);border-radius:50%;cursor:pointer;font-size:16px;color:var(--tx2);display:flex;align-items:center;justify-content:center;}
 .bso{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px;}
 .bso.open{opacity:1;pointer-events:all;}
+.mo-c{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:0 0 max(20px,env(safe-area-inset-bottom));transform:translateY(40px);transition:transform .25s;}
+.mo.open .mo-c{transform:translateY(0);}
+.mo-h{padding:0 18px 14px;display:flex;align-items:center;justify-content:space-between;}
+.mc{width:32px;height:32px;border:none;background:var(--bg2);border-radius:50%;cursor:pointer;font-size:16px;color:var(--tx2);display:flex;align-items:center;justify-content:center;}
 .bsbg{position:absolute;inset:0;} .bsbg img{width:100%;height:100%;object-fit:cover;opacity:.2;}
 .bsc{position:relative;z-index:1;text-align:center;width:100%;max-width:340px;}
 .bcw{width:220px;height:220px;margin:0 auto 20px;position:relative;display:flex;align-items:center;justify-content:center;}
@@ -158,15 +162,15 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 <header id="hdr">
   <div class="logo">INSPIR<span>APP</span></div>
   <div class="hdr-r">
-    <button class="ib" onclick="App.openMusic()">🎵</button>
-    <button class="ib" onclick="App.openSettings()">⚙️</button>
+    <button class="ib" onclick="App.openMusic()" title="Música"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/></svg></button>
+    <button class="ib" onclick="App.openSettings()" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></button>
   </div>
 </header>
 <main id="main">
 
 <!-- INICIO -->
 <section id="sc-inicio" class="sc active">
-  <div class="hero"><img id="hero-img" alt=""><div class="ho"><div class="ht" id="hg">Buenos días 🌿</div><div class="hs" id="hd"></div></div></div>
+  <div class="hero"><img id="hero-img" alt=""><div class="ho"><div class="ht" id="hg">Buenos días</div><div class="hs" id="hd"></div></div></div>
   <div class="sec">
     <div class="rc" onclick="App.tip('Basado en racha, sesiones, BOLT y ánimo')">
       <div class="rr">
@@ -215,7 +219,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
             <div style="font-size:10px;color:rgba(255,255,255,.75)">Días</div>
           </div>
         </div>
-        <button onclick="App.openUnlock()" style="width:100%;background:#fff;color:var(--ac);border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">🔓 Desbloquear — 9,99€</button>
+        <button onclick="App.openUnlock()" style="width:100%;background:#fff;color:var(--ac);border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">Desbloquear — 9,99€</button>
         <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:8px">Pago único · Sin suscripción</div>
       </div>
     </div>
@@ -242,7 +246,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 <!-- RETOS -->
 <section id="sc-retos" class="sc">
   <div class="sec">
-    <div class="st">🏆 Retos & Desafíos</div>
+    <div class="st">Retos & Desafíos</div>
     <div id="reto-diario"></div>
     <div class="st" style="margin-top:4px">Retos semanales</div>
     <div id="retos-sem"></div>
@@ -257,7 +261,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
       <div style="font-size:28px;margin-bottom:6px">🔒</div>
       <div style="font-weight:700;font-size:14px;color:var(--tx);margin-bottom:5px">Plan Premium</div>
       <div style="font-size:12px;color:var(--tx2);margin-bottom:12px">30 días de hábitos con ciencia detrás. Desbloquea con INSPIRAPP Premium.</div>
-      <button class="bf" onclick="App.openUnlock()" style="width:100%">🔓 Desbloquear — 9,99€</button>
+      <button class="bf" onclick="App.openUnlock()" style="width:100%">Desbloquear — 9,99€</button>
     </div>
     <div id="plan30-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px"></div>
     <div id="plan30-detail" style="display:none;background:var(--surface);border-radius:14px;padding:14px;margin-top:4px;border:1.5px solid var(--br)"></div>
@@ -275,12 +279,12 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 <!-- APRENDE -->
 <section id="sc-aprende" class="sc">
   <div class="sec">
-    <div class="st">📚 Academia INSPIRAPP</div>
+    <div class="st">Academia INSPIRAPP</div>
     <div id="academia-locked" style="display:none;background:var(--surface);border:1.5px solid var(--br);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px">
       <div style="font-size:32px;margin-bottom:8px">🔒</div>
       <div style="font-weight:700;font-size:15px;color:var(--tx);margin-bottom:6px">Academia Premium</div>
       <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">12 lecciones sobre los 8 pilares del biohacking con ciencia detrás de cada una. Acceso de por vida.</div>
-      <button class="bf" onclick="App.openUnlock()" style="width:100%;margin-bottom:8px">🔓 Desbloquear — 9,99€</button>
+      <button class="bf" onclick="App.openUnlock()" style="width:100%;margin-bottom:8px">Desbloquear — 9,99€</button>
       <div style="font-size:11px;color:var(--tx2)">Pago único · Sin suscripción · Acceso inmediato</div>
     </div>
     <div id="lessons-list"></div>
@@ -298,11 +302,11 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 </main>
 
 <nav id="nav">
-  <button class="nb active" onclick="App.go('inicio')"><span class="ni">🏠</span>Inicio</button>
-  <button class="nb" onclick="App.go('respirar')"><span class="ni">🫁</span>Respirar</button>
-  <button class="nb" onclick="App.go('retos')"><span class="ni">🏆</span>Retos</button>
-  <button class="nb" onclick="App.go('moverse')"><span class="ni">🧘</span>Moverse</button>
-  <button class="nb" onclick="App.go('aprende')"><span class="ni">📚</span>Aprende</button>
+  <button class="nb active" onclick="App.go('inicio')"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg></span>Inicio</button>
+  <button class="nb" onclick="App.go('respirar')"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25c0 0-6 4.5-6 9a6 6 0 0012 0c0-4.5-6-9-6-9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 13.5c0 2.071 1.679 3.75 3.75 3.75s3.75-1.679 3.75-3.75"/></svg></span>Respirar</button>
+  <button class="nb" onclick="App.go('retos')"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.496m0 0L9 9.75M14.504 13.5l.496-3.75M9 9.75l-.43-3.21a1.128 1.128 0 00-1.12-.99H5.85a1.126 1.126 0 00-1.12 1.26L5.25 9.75m13.5 0l.53-3.99A1.126 1.126 0 0018.154 4.8h-1.6a1.128 1.128 0 00-1.12.99L15 9.75m-5.25 0h5.25"/></svg></span>Retos</button>
+  <button class="nb" onclick="App.go('moverse')"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 9h6M12 7v5l3 3M9 17l3-2 3 2"/></svg></span>Moverse</button>
+  <button class="nb" onclick="App.go('aprende')"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>Aprende</button>
 </nav>
 
 <div class="toast" id="toast"></div>
@@ -312,19 +316,19 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
   <div class="mo-c" style="padding-bottom:max(24px,env(safe-area-inset-bottom))">
     <div class="mh2"></div>
     <div style="text-align:center;padding:8px 20px 20px">
-      <div style="font-size:52px;margin-bottom:12px">🌿</div>
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--ac);margin:0 auto 16px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" width="28" height="28"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25c0 0-6 4.5-6 9a6 6 0 0012 0c0-4.5-6-9-6-9z"/></svg></div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--tx);margin-bottom:6px">Bienvenido a INSPIRAPP</div>
       <div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:22px">Tu app de respiración y biohacking.<br>En 3 pasos, empieza hoy.</div>
       <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:22px;text-align:left">
         <div style="display:flex;align-items:center;gap:14px;background:var(--s2);border-radius:14px;padding:12px 14px">
-          <div style="font-size:28px;flex-shrink:0">🫁</div>
+          <div style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25c0 0-6 4.5-6 9a6 6 0 0012 0c0-4.5-6-9-6-9z"/></svg></div>
           <div>
             <div style="font-weight:600;font-size:14px;color:var(--tx)">Respira</div>
             <div style="font-size:12px;color:var(--tx2);margin-top:2px">Elige un protocolo de respiración y hazlo tu hábito diario</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:14px;background:var(--s2);border-radius:14px;padding:12px 14px">
-          <div style="font-size:28px;flex-shrink:0">🏆</div>
+          <div style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.496M12 9.75h.008v.008H12V9.75z"/></svg></div>
           <div>
             <div style="font-weight:600;font-size:14px;color:var(--tx)">Completa retos</div>
             <div style="font-size:12px;color:var(--tx2);margin-top:2px">Pequeños retos diarios para construir hábitos que duran</div>
@@ -346,7 +350,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 <!-- MODAL UNLOCK -->
 <div class="mo" id="mo-unlock">
   <div class="mo-c">
-    <div class="mo-h"><span id="unlock-title">🔓 INSPIRAPP Premium</span><button class="mc" onclick="App.cm('mo-unlock')">✕</button></div>
+    <div class="mo-h"><span id="unlock-title" style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600">INSPIRAPP Premium</span><button class="mc" onclick="App.cm('mo-unlock')">✕</button></div>
     <div style="text-align:center;padding:8px 0 16px">
       <div style="font-size:40px;margin-bottom:10px">⚡</div>
       <div style="font-weight:700;font-size:16px;color:var(--tx);margin-bottom:8px">Desbloquea todo el contenido</div>
@@ -401,7 +405,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
   </div>
   <div class="ybt">
     <div class="ypr"><span style="font-size:11px;color:var(--tx2)" id="ypl"></span><div class="ypb"><div class="ypf" id="ypf"></div></div></div>
-    <div class="ybr"><button class="bs1" onclick="App.prevPose()">‹</button><button class="bp1" id="ynb" onclick="App.nextPose()">Siguiente →</button><button class="bs1" onclick="App.togYogaAudio()">🎵</button></div>
+    <div class="ybr"><button class="bs1" onclick="App.prevPose()">‹</button><button class="bp1" id="ynb" onclick="App.nextPose()">Siguiente →</button><button class="bs1" onclick="App.togYogaAudio()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/></svg></button></div>
   </div>
 </div>
 
@@ -429,7 +433,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 <!-- MODAL MUSIC -->
 <div class="mo" id="mo-music">
   <div class="md"><div class="mh2"></div>
-    <div class="mh"><div class="mt">🎵 Música Ambiental</div><button class="xb" onclick="App.cm('mo-music')">✕</button></div>
+    <div class="mh"><div class="mt">Música Ambiental</div><button class="xb" onclick="App.cm('mo-music')">✕</button></div>
     <div class="mb" id="mlist"></div>
   </div>
 </div>
@@ -437,10 +441,10 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 <!-- MODAL SETTINGS -->
 <div class="mo" id="mo-settings">
   <div class="md"><div class="mh2"></div>
-    <div class="mh"><div class="mt">⚙️ Ajustes</div><button class="xb" onclick="App.cm('mo-settings')">✕</button></div>
+    <div class="mh"><div class="mt">Ajustes</div><button class="xb" onclick="App.cm('mo-settings')">✕</button></div>
     <div class="mb">
       <p style="font-size:12px;color:var(--tx2);margin-bottom:10px">Tema de color</p>
-      <div class="chips"><div class="chip" onclick="App.theme('forest')">🌿 Bosque</div><div class="chip" onclick="App.theme('ocean')">🌊 Océano</div><div class="chip" onclick="App.theme('sunset')">🌅 Atardecer</div><div class="chip" onclick="App.theme('lavender')">💜 Lavanda</div></div>
+      <div class="chips"><div class="chip" onclick="App.theme('forest')">Bosque</div><div class="chip" onclick="App.theme('ocean')">Océano</div><div class="chip" onclick="App.theme('sunset')">Atardecer</div><div class="chip" onclick="App.theme('lavender')">Lavanda</div></div>
       <div class="dv"></div>
       <p style="font-size:12px;color:var(--tx2);margin-bottom:8px">Recordatorio diario</p>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
@@ -620,7 +624,7 @@ var FACTS=[
   {t:'El aislamiento social activa el mismo circuito neuronal que el dolor físico. Las relaciones positivas reducen el cortisol mejor que cualquier fármaco.',s:'— Eisenberger & Cole, PNAS 2012'}
 ];
 
-var NATURE=['https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80','https://images.unsplash.com/photo-1511497584788-876760111969?w=800&q=80','https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80','https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=800&q=80','https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80'];
+var NATURE=['https://picsum.photos/id/137/800/500','https://picsum.photos/id/15/800/500','https://picsum.photos/id/10/800/500','https://picsum.photos/id/11/800/500','https://picsum.photos/id/13/800/500'];
 
 var COLD_ST=[{n:'Agua caliente',d:120,i:'🔥'},{n:'Agua fría (25°C)',d:30,i:'❄️'},{n:'Agua caliente',d:30,i:'🔥'},{n:'Agua fría (18°C)',d:60,i:'🧊'},{n:'Agua caliente',d:20,i:'🔥'},{n:'Agua muy fría',d:30,i:'🌨️'}];
 
@@ -803,7 +807,7 @@ function boltStop(){
   else if(s<20){rl.className='bolt-r ba-';rl.textContent='Bajo — hay margen';ra.textContent='Incorpora Buteyko a diario. Objetivo: +5s por semana.';}
   else if(s<30){rl.className='bolt-r ba-';rl.textContent='Moderado — nivel funcional';ra.textContent='Añade retenciones en Wim Hof. Objetivo: alcanzar 30s.';}
   else if(s<40){rl.className='bolt-r bg-';rl.textContent='Bueno — nivel atlético';ra.textContent='Experimenta con Tummo. Objetivo: BOLT 40+.';}
-  else{rl.className='bolt-r be-';rl.textContent='Excelente — nivel élite 🏆';ra.textContent='Mantén la práctica. Considera entrenamiento en altitud o apnea.';}
+  else{rl.className='bolt-r be-';rl.textContent='Excelente — nivel élite';ra.textContent='Mantén la práctica. Considera entrenamiento en altitud o apnea.';}
   if(s>(S.bestBolt||0)){S.bestBolt=s;saveS();}
   document.getElementById('boltbv').textContent=s+'s';document.getElementById('rbolt').textContent=s+'s';
   updateUI();checkBadges();
@@ -837,7 +841,7 @@ function finish(name,type,minutes,xpGain){
   S.history=S.history||[];pending={name:name,type:type,minutes:minutes,date:new Date().toISOString()};saveS();updateUI();
   document.getElementById('msn').textContent=name;om('mo-mood');
 }
-function saveMood(v){cm('mo-mood');if(v>0)S.lastMood=v;if(pending){pending.mood=v;S.history.unshift(pending);if(S.history.length>50)S.history.pop();pending=null;saveS();}updateUI();tip('¡Sesión guardada! +1 día de racha 🌿');checkBadges();}
+function saveMood(v){cm('mo-mood');if(v>0)S.lastMood=v;if(pending){pending.mood=v;S.history.unshift(pending);if(S.history.length>50)S.history.pop();pending=null;saveS();}updateUI();tip('¡Sesión guardada! +1 día de racha');checkBadges();}
 
 // BADGES
 function checkBadges(){
@@ -966,7 +970,7 @@ function checkDailyNotif(){
   var now=new Date();
   var notifH=parseInt(parts[0]),notifM=parseInt(parts[1]);
   if(now.getHours()>notifH||(now.getHours()===notifH&&now.getMinutes()>=notifM)){
-    new Notification('INSPIRAPP 🌿',{body:'Es hora de tu sesión de respiración. '+((S.streak||0)+' días de racha — ¡no lo rompas!'),icon:'./icon-192.png'});
+    new Notification('INSPIRAPP',{body:'Es hora de tu sesión de respiración. '+((S.streak||0)+' días de racha — ¡no lo rompas!'),icon:'./icon-192.png'});
     localStorage.setItem('notif-last',today);
   }
 }
@@ -991,7 +995,7 @@ function shareProgress(){
   ctx.font='bold 28px Inter,sans-serif';ctx.fillStyle='rgba(255,255,255,.6)';
   ctx.fillText('INSPIRAPP',60,80);
   // Emoji
-  ctx.font='80px serif';ctx.fillText('🌿',60,200);
+  ctx.font='bold 48px serif';ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--ac')||'#5e8a5f';ctx.fillText('INSPIRAPP',60,200);
   // Racha
   ctx.font='bold 110px Inter,sans-serif';ctx.fillStyle='#ffffff';
   ctx.fillText((S.streak||0),60,340);
@@ -1020,7 +1024,7 @@ function shareProgress(){
   c.toBlob(function(blob){
     var url=URL.createObjectURL(blob);
     if(navigator.share){
-      navigator.share({title:'Mi progreso en INSPIRAPP',text:(S.streak||0)+' días de racha 🌿',files:[new File([blob],'inspirapp-progreso.png',{type:'image/png'})]}).catch(function(){dl(url);});
+      navigator.share({title:'Mi progreso en INSPIRAPP',text:(S.streak||0)+' días de racha',files:[new File([blob],'inspirapp-progreso.png',{type:'image/png'})]}).catch(function(){dl(url);});
     } else {dl(url);}
   },'image/png');
 }
@@ -1135,7 +1139,7 @@ window.App={
   openSettings:function(){om('mo-settings');},
   cm:cm,saveMood:saveMood,theme:setTheme,tip:tip,
   openLesson:openLesson,
-  completeLesson:function(id){S.lessonsDone=S.lessonsDone||[];if(!S.lessonsDone.includes(id)){S.lessonsDone.push(id);S.xp=(S.xp||0)+15;saveS();updateUI();tip('Lección completada! +15 XP 📚');}cm('mo-lesson');renderLessons();renderPillars();},
+  completeLesson:function(id){S.lessonsDone=S.lessonsDone||[];if(!S.lessonsDone.includes(id)){S.lessonsDone.push(id);S.xp=(S.xp||0)+15;saveS();updateUI();tip('Lección completada! +15 XP');}cm('mo-lesson');renderLessons();renderPillars();},
   showPlan30Day:showPlan30Day,
   completePlan30Day:completePlan30Day,
   closeWelcome:function(){cm('mo-welcome');localStorage.setItem('inspi-welcomed','1');},
@@ -1158,7 +1162,7 @@ window.startBreath=startBreath;window.startYoga=startYoga;
 (function(){
   loadS();
   document.documentElement.setAttribute('data-theme',localStorage.getItem('inspi-theme')||'forest');
-  var h=new Date().getHours();document.getElementById('hg').textContent=(h<12?'Buenos días':h<19?'Buenas tardes':'Buenas noches')+' 🌿';
+  var h=new Date().getHours();document.getElementById('hg').textContent=(h<12?'Buenos días':h<19?'Buenas tardes':'Buenas noches');
   document.getElementById('hd').textContent=new Date().toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'});
   var url=NATURE[Math.floor(Math.random()*NATURE.length)];var img=document.getElementById('hero-img');var ii=new Image();ii.onload=function(){img.src=url;setTimeout(function(){img.classList.add('ld');},50);};ii.src=url;
   nextFact();setInterval(nextFact,12000);
