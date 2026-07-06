@@ -60,6 +60,7 @@ body{display:flex;flex-direction:column;}
 .xb{width:32px;height:32px;border:none;background:var(--bg2);border-radius:50%;cursor:pointer;font-size:16px;color:var(--tx2);display:flex;align-items:center;justify-content:center;}
 .bso{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px;}
 .bso.open{opacity:1;pointer-events:all;}
+.br2.sel{border-color:var(--ac)!important;color:var(--ac)!important;}
 .goal-opt.sel{border-color:var(--ac)!important;background:color-mix(in srgb,var(--ac) 12%,var(--s2))!important;}
 .mo-c{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:0 0 max(20px,env(safe-area-inset-bottom));transform:translateY(40px);transition:transform .25s;}
 .mo.open .mo-c{transform:translateY(0);}
@@ -196,7 +197,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
       <div class="level-badge"><svg viewBox='0 0 24 24' width='1em' height='1em' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' style='vertical-align:-.15em'><path d='M12 3l2.6 5.5 6 .8-4.3 4.2 1 6-5.3-2.9L6.7 19.5l1-6L3.4 9.3l6-.8z'/></svg> Nv. <span id="lvl-num">1</span></div>
       <div style="flex:1"><div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div><div style="font-size:10px;color:var(--tx2)"><span id="xp-cur">0</span> / <span id="xp-nxt">100</span> XP</div></div>
     </div>
-    <div class="fc" id="fact-card" onclick="nextFact()"><div class="ft" id="ft"></div><div class="fs" id="fs"></div></div>
+    <div class="fc" id="fact-card" onclick="nextFact()"><div class="ft" id="ft"></div><div class="fs" id="fs"></div></div><div style="background:var(--surface);border:1px solid var(--br);border-radius:16px;padding:14px 16px;margin-top:10px;box-shadow:var(--sh)"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--tx2)">No rompas la cadena</div><div style="font-size:11px;color:var(--ac)" id="chain-sub"></div></div><div id="chain-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;max-width:280px;margin:0 auto"></div></div><div id="goal-suggest" style="display:none;margin-top:10px"></div>
     <button onclick="App.shareProgress()" style="width:100%;background:var(--surface);border:1.5px solid var(--br);border-radius:13px;padding:11px;font-size:13px;font-weight:600;color:var(--tx2);cursor:pointer;margin-bottom:4px;font-family:'Inter',sans-serif;"><svg viewBox='0 0 24 24' width='1em' height='1em' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' style='vertical-align:-.15em'><path d='M12 15V4M8 8l4-4 4 4M5 15v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4'/></svg> Compartir mi progreso</button>
     <div class="st">Comenzar ahora</div>
     <div class="card" onclick="App.startBreath('wim-hof')"><div class="cbanner"><img src="https://images.unsplash.com/photo-1713428856206-d692c1ed42d6?w=600&q=70&auto=format&fit=crop" alt="" loading="lazy"><span class="cbadge">Popular</span></div><div class="cr"><div class="ci"><svg viewBox='0 0 24 24' width='1em' height='1em' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' style='vertical-align:-.15em'><path d='M3 8h11a3 3 0 1 0-3-3'/><path d='M3 12h15a3 3 0 1 1-3 3'/><path d='M3 16h8a2.4 2.4 0 1 1-2.4 2.4'/></svg></div><div class="cb"><div class="ct">Método Wim Hof</div><div class="cd">Activación & energía · 3 rondas</div></div></div></div>
@@ -348,7 +349,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
         <span style="color:var(--ac)">✓</span> Los 8 Pilares del Biohacking<br>
         <span style="color:var(--ac)">✓</span> Academia completa — 12 lecciones<br>
         <span style="color:var(--ac)">✓</span> Plan 30 Días interactivo<br>
-        <span style="color:var(--ac)">✓</span> Acceso de por vida · Sin suscripción
+        <span style="color:var(--ac)">✓</span> Pago único · Sin suscripción · Sin cobros sorpresa
       </div>
       <a href="https://danimij.gumroad.com/l/wpsxro" target="_blank" class="bf" style="display:block;width:100%;margin-bottom:14px;text-decoration:none;text-align:center">Comprar por 9,99€ →</a>
       <div style="font-size:12px;color:var(--tx2);margin-bottom:10px">¿Ya tienes un código? Introdúcelo aquí:</div>
@@ -380,7 +381,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
     <div style="color:rgba(255,255,255,.7);font-size:12px" id="brd"></div>
     <div class="bpr"><div class="bpb" id="bpb" style="width:0%"></div></div>
     <div style="color:#fff;font-size:12px;opacity:.75;margin-bottom:8px" id="binf"></div>
-    <div class="ba"><button class="br2 s" onclick="App.stopBreath()">✕ Salir</button><button class="br2 s" id="bmute" onclick="togBreathMusic()" title="Música" style="flex:0 0 auto;min-width:44px"><svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V6l10-2v10'/><circle cx='6' cy='18' r='2.6'/><circle cx='16' cy='16' r='2.6'/></svg></button><button class="br2" onclick="App.skipPhase()">Siguiente →</button></div>
+    <div class="ba"><button class="br2 s" onclick="App.stopBreath()">✕ Salir</button><button class="br2 s" id="bvoice" onclick="togVoice()" title="Voz guía" style="flex:0 0 auto;min-width:44px" class="br2 s"><svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z'/><path d='M6 11a6 6 0 0 0 12 0M12 18v3'/></svg></button><button class="br2 s" id="bmute" onclick="togBreathMusic()" title="Música" style="flex:0 0 auto;min-width:44px"><svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V6l10-2v10'/><circle cx='6' cy='18' r='2.6'/><circle cx='16' cy='16' r='2.6'/></svg></button><button class="br2" onclick="App.skipPhase()">Siguiente →</button></div>
   </div>
 </div>
 
@@ -678,8 +679,9 @@ function xpInLevel(xp){var lv=calcLevel(xp);var base=XP_LEVELS[lv-1]||0;return x
 function xpLevelSize(xp){var lv=calcLevel(xp);var base=XP_LEVELS[lv-1]||0;var next=xpForNext(xp);return next-base;}
 
 // STATE
-var S={sessions:0,streak:0,lastDate:null,bestBolt:0,lastMood:0,history:[],wim:0,yoga:0,cold:0,uniq:[],totalMin:0,xp:0,wimWeek:0,yogaWeek:0,coldWeek:0,lessonsDone:[],premium:false,usedCodes:[],plan30done:[]};
+var S={sessions:0,streak:0,lastDate:null,bestBolt:0,lastMood:0,history:[],wim:0,yoga:0,cold:0,uniq:[],totalMin:0,xp:0,wimWeek:0,yogaWeek:0,coldWeek:0,lessonsDone:[],premium:false,usedCodes:[],plan30done:[],freezeMonth:null,goal:'',bestStreak:0};
 function loadS(){try{Object.assign(S,JSON.parse(localStorage.getItem('inspirapp-v1')||'{}'));}catch(e){}}
+var _voiceOn=localStorage.getItem('inspi-voice')!=='0';function _speak(t){if(!_voiceOn||typeof speechSynthesis==='undefined'||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.92;speechSynthesis.speak(u);}catch(e){}}function _stopVoice(){if(typeof speechSynthesis!=='undefined'){try{speechSynthesis.cancel();}catch(e){}}}function togVoice(){_voiceOn=!_voiceOn;localStorage.setItem('inspi-voice',_voiceOn?'1':'0');if(!_voiceOn)_stopVoice();else _speak('Voz activada');var b=document.getElementById('bvoice');if(b)b.classList.toggle('sel',_voiceOn);}window.togVoice=togVoice;
 function saveS(){try{localStorage.setItem('inspirapp-v1',JSON.stringify(S));}catch(e){}}
 
 // AUDIO
@@ -768,9 +770,10 @@ function startBreath(id){
   var url=NATURE[Math.floor(Math.random()*NATURE.length)];var bg=document.getElementById('bsbg');var i=new Image();i.onload=function(){bg.src=url;};i.src=url;
   acquireWL();
   actMusic('piano-calm');
+  _speak('Comenzamos. Sigue mi voz.');
   tickB();
 }
-function stopBreath(){BS.running=false;clearTimeout(BS.to);document.getElementById('bso').classList.remove('open');releaseWL();if(_breathMusic){try{stopMusic();}catch(e){}_breathMusic=false;}if(BS.tech)finish(BS.tech.name,'respiracion',3,20);}
+function stopBreath(){BS.running=false;_stopVoice();clearTimeout(BS.to);document.getElementById('bso').classList.remove('open');releaseWL();if(_breathMusic){try{stopMusic();}catch(e){}_breathMusic=false;}if(BS.tech)finish(BS.tech.name,'respiracion',3,20);}
 window.stopBreath=stopBreath;
 var _M_ON="<svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V6l10-2v10'/><circle cx='6' cy='18' r='2.6'/><circle cx='16' cy='16' r='2.6'/></svg>",_M_OFF="<svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V6l10-2v6'/><circle cx='6' cy='18' r='2.6'/><path d='M3 3l18 18'/></svg>";
 function togBreathMusic(){var b=document.getElementById('bmute');if(CurAudio){stopMusic();_breathMusic=false;if(b)b.innerHTML=_M_OFF;}else{try{playTrack('piano-calm');_breathMusic=true;if(b)b.innerHTML=_M_ON;}catch(e){}}}
@@ -785,11 +788,11 @@ function tickB(){
   var total=t.cycles*(t.rounds||1);
   bar.style.width=Math.min(100,((BS.round-1)*t.cycles+BS.cycle)/total*100)+'%';
   if(BS.ret){
-    var rs=t.ret.d;circ.className='bc hold';ph.textContent=t.ret.n;rd.textContent='Ronda '+BS.round+(t.rounds?' / '+t.rounds:'');
+    var rs=t.ret.d;circ.className='bc hold';ph.textContent=t.ret.n;_speak(t.ret.n);rd.textContent='Ronda '+BS.round+(t.rounds?' / '+t.rounds:'');
     (function cd(){if(!BS.running)return;cn.textContent=rs;if(rs<=0){BS.ret=false;if(t.rec)BS.rec=true;else nextRound();return;}rs--;BS.to=setTimeout(cd,1000);})();return;
   }
   if(BS.rec){
-    var recs=t.rec.d;circ.className='bc inhale';ph.textContent=t.rec.n;
+    var recs=t.rec.d;circ.className='bc inhale';ph.textContent=t.rec.n;_speak(t.rec.n);
     (function rd2(){if(!BS.running)return;cn.textContent=recs;if(recs<=0){BS.rec=false;nextRound();return;}recs--;BS.to=setTimeout(rd2,1000);})();return;
   }
   var p=t.phases[BS.pi];
@@ -799,7 +802,7 @@ function tickB(){
   var ring=document.getElementById('bc-ring'),ring2=document.getElementById('bc-ring2');
   if(p.t==='hold'){ring.classList.add('active');ring2.classList.add('active');}
   else{ring.classList.remove('active');ring2.classList.remove('active');}
-  ph.textContent=p.n;rd.textContent='Resp '+(BS.cycle+1)+' / '+t.cycles+(t.rounds?' · R'+BS.round:'');
+  ph.textContent=p.n;_speak(p.n);rd.textContent='Resp '+(BS.cycle+1)+' / '+t.cycles+(t.rounds?' · R'+BS.round:'');
   if(p.d>2){var cs=Math.round(p.d);(function cdd(){if(!BS.running)return;cn.textContent=cs;if(cs<=0){advB();return;}cs--;BS.to=setTimeout(cdd,1000);})();}
   else{cn.textContent='';BS.to=setTimeout(advB,p.d*1000);}
 }
@@ -892,7 +895,7 @@ var pending=null;
 function finish(name,type,minutes,xpGain){
   S.sessions++;S.totalMin=(S.totalMin||0)+(minutes||0);S.xp=(S.xp||0)+(xpGain||10);
   var today=new Date().toDateString();
-  if(S.lastDate!==today){var yest=new Date(Date.now()-86400000).toDateString();S.streak=(S.lastDate===yest?S.streak:0)+1;S.lastDate=today;}
+  if(S.lastDate!==today){var yest=new Date(Date.now()-86400000).toDateString();var db=new Date(Date.now()-172800000).toDateString();var mon=new Date().toISOString().slice(0,7);if(S.lastDate===yest){S.streak=(S.streak||0)+1;}else if(S.lastDate===db&&S.freezeMonth!==mon&&(S.streak||0)>0){S.streak=(S.streak||0)+1;S.freezeMonth=mon;tip('Racha protegida: te saltaste un día pero la mantienes 🔥');}else{S.streak=1;}S.lastDate=today;S.bestStreak=Math.max(S.bestStreak||0,S.streak);}
   if(name.toLowerCase().indexOf('wim')>=0){S.wim=(S.wim||0)+1;S.wimWeek=(S.wimWeek||0)+1;}
   S.uniq=S.uniq||[];if(S.uniq.indexOf(name)<0)S.uniq.push(name);
   S.history=S.history||[];pending={name:name,type:type,minutes:minutes,date:new Date().toISOString()};saveS();updateUI();
@@ -1148,7 +1151,9 @@ function renderProgress(){
 }
 
 // READINESS & XP
-function updateUI(){
+function renderChain(){var g=document.getElementById('chain-grid');if(!g)return;var set={};(S.history||[]).forEach(function(h){try{set[new Date(h.date).toISOString().slice(0,10)]=1;}catch(e){}});var today=new Date().toISOString().slice(0,10),html='';for(var i=34;i>=0;i--){var d=new Date(Date.now()-i*86400000).toISOString().slice(0,10);var on=set[d];var td=d===today;html+='<div style="aspect-ratio:1;border-radius:5px;background:'+(on?'var(--ac)':'var(--bg2)')+';'+(td?'box-shadow:0 0 0 2px var(--ac)':'')+'"></div>';}g.innerHTML=html;var sub=document.getElementById('chain-sub');if(sub)sub.textContent=(S.streak||0)+' días · mejor '+(S.bestStreak||S.streak||0);}
+function renderGoalSuggest(){var el=document.getElementById('goal-suggest');if(!el)return;var map={calma:{id:'coherence',n:'Coherencia Cardíaca',d:'Ideal para bajar el estrés'},dormir:{id:'coherence',n:'Coherencia Cardíaca',d:'Prepara el cuerpo para dormir'},energia:{id:'wim-hof',n:'Método Wim Hof',d:'Actívate y sube tu energía'},foco:{id:'box',n:'Respiración en Cuadro',d:'Claridad mental y foco'}};var g=map[S.goal];if(!g){el.style.display='none';return;}el.style.display='block';el.innerHTML='<div onclick="startBreath(\''+g.id+'\')" style="display:flex;align-items:center;gap:12px;background:color-mix(in srgb,var(--ac) 10%,var(--surface));border:1.5px solid color-mix(in srgb,var(--ac) 30%,transparent);border-radius:14px;padding:12px 14px;cursor:pointer"><div style="flex-shrink:0;width:34px;height:34px;border-radius:9px;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center"><svg viewBox=\'0 0 24 24\' width=\'18\' height=\'18\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M13 2 4 14h7l-1 8 9-12h-7z\'/></svg></div><div style="flex:1"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ac)">Para tu objetivo</div><div style="font-weight:600;font-size:14px;color:var(--tx)">'+g.n+'</div><div style="font-size:12px;color:var(--tx2)">'+g.d+'</div></div><svg viewBox=\'0 0 24 24\' width=\'18\' height=\'18\' fill=\'none\' stroke=\'var(--ac)\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M5 12h14M13 6l6 6-6 6\'/></svg></div>';}
+function updateUI(){renderGoalSuggest();renderChain();
   var r=Math.min(100,Math.min(30,(S.streak||0)*4)+Math.min(20,(S.sessions||0)*2)+Math.min(25,Math.round((S.bestBolt||0)/2))+Math.min(15,(S.lastMood||0)*3)+Math.min(10,Math.round((S.totalMin||0)/10)));
   document.getElementById('rn').textContent=r;
   document.getElementById('rarc').style.strokeDashoffset=213.6-(213.6*r/100);
