@@ -133,6 +133,10 @@ body{display:flex;flex-direction:column;}
 .lesson-body{flex:1;} .lesson-ttl{font-weight:600;font-size:14px;} .lesson-sub{font-size:11px;color:var(--tx2);margin-top:2px;}
 .lesson-arrow{color:var(--tx2);font-size:18px;}
 /* Meditation */
+.med-item{display:flex;flex-direction:column;gap:2px;background:var(--s2);border:1.5px solid transparent;border-radius:14px;padding:13px 15px;cursor:pointer;font-family:Inter,sans-serif;text-align:left;transition:border-color .15s}
+.med-item:active{border-color:var(--ac)}
+.med-item .mnm{font-weight:600;font-size:14px;color:var(--tx)}
+.med-item .msb{font-size:12px;color:var(--tx2)}
 .med-circle{width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--ac2),var(--ac));display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 40px rgba(58,125,87,.3);transition:transform 4s ease-in-out,opacity .5s;}
 .med-circle.in{transform:scale(1.2);} .med-circle.out{transform:scale(.85);opacity:.8;}
 /* badges grid */
@@ -486,9 +490,8 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
         <div id="med-circle" class="med-circle"><div style="color:#fff;font-family:'Cormorant Garamond',serif;font-size:22px" id="med-ph">Inhala</div><div style="color:#fff;font-size:36px;font-weight:700" id="med-cnt">—</div></div>
         <div style="color:var(--tx2);font-size:13px;margin-bottom:14px" id="med-info"></div>
         <div id="med-sel">
-          <p style="margin-bottom:10px;font-size:13px;color:var(--tx2)">Elige duración</p>
-          <div class="chips" style="justify-content:center"><div class="chip on" onclick="App.setMedDur(5,this)">5 min</div><div class="chip" onclick="App.setMedDur(10,this)">10 min</div><div class="chip" onclick="App.setMedDur(20,this)">20 min</div></div>
-          <button class="bf" style="margin-top:12px" onclick="App.startMed()">▶ Comenzar meditación</button>
+          <p style="margin-bottom:12px;font-size:13px;color:var(--tx2)">Elige tu meditación guiada</p>
+          <div id="med-list" style="display:flex;flex-direction:column;gap:8px;text-align:left"></div>
         </div>
         <div id="med-running" style="display:none">
           <div class="bpr" style="margin:0 0 12px"><div class="bpb" id="med-bar" style="width:0%"></div></div>
@@ -682,7 +685,8 @@ function xpLevelSize(xp){var lv=calcLevel(xp);var base=XP_LEVELS[lv-1]||0;var ne
 var S={sessions:0,streak:0,lastDate:null,bestBolt:0,lastMood:0,history:[],wim:0,yoga:0,cold:0,uniq:[],totalMin:0,xp:0,wimWeek:0,yogaWeek:0,coldWeek:0,lessonsDone:[],premium:false,usedCodes:[],plan30done:[],freezeMonth:null,goal:'',bestStreak:0};
 function loadS(){try{Object.assign(S,JSON.parse(localStorage.getItem('inspirapp-v1')||'{}'));}catch(e){}}
 var _voiceOn=localStorage.getItem('inspi-voice')!=='0';function _speak(t){if(!_voiceOn||typeof speechSynthesis==='undefined'||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.92;speechSynthesis.speak(u);}catch(e){}}function _speakSlow(t){if(!_voiceOn||typeof speechSynthesis==='undefined'||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.82;u.pitch=1;speechSynthesis.speak(u);}catch(e){}}
-function _stopVoice(){if(typeof speechSynthesis!=='undefined'){try{speechSynthesis.cancel();}catch(e){}}}function togVoice(){_voiceOn=!_voiceOn;localStorage.setItem('inspi-voice',_voiceOn?'1':'0');if(!_voiceOn)_stopVoice();else _speak('Voz activada');var b=document.getElementById('bvoice');if(b)b.classList.toggle('sel',_voiceOn);}window.togVoice=togVoice;
+var _sayEl=null;function _stopSay(){if(_sayEl){try{_sayEl.pause();}catch(e){}_sayEl=null;}}function _say(key,fallback){if(!_voiceOn)return;_stopSay();try{speechSynthesis.cancel();}catch(e){}try{var el=new Audio('audio/'+key+'.mp3');_sayEl=el;el.addEventListener('error',function(){if(_sayEl===el){_speakSlow(fallback);}});el.play().catch(function(){if(_sayEl===el){_speakSlow(fallback);}});}catch(e){_speakSlow(fallback);}}function _pkey(n){var m={'Inhala':'inhala','Exhala':'exhala','Reten':'reten','Aguanta':'aguanta','Pausa':'pausa','Suelta':'exhala'};return m[n]||'';}
+function _stopVoice(){_stopSay();if(typeof speechSynthesis!=='undefined'){try{speechSynthesis.cancel();}catch(e){}}}function togVoice(){_voiceOn=!_voiceOn;localStorage.setItem('inspi-voice',_voiceOn?'1':'0');if(!_voiceOn)_stopVoice();else _speak('Voz activada');var b=document.getElementById('bvoice');if(b)b.classList.toggle('sel',_voiceOn);}window.togVoice=togVoice;
 function saveS(){try{localStorage.setItem('inspirapp-v1',JSON.stringify(S));}catch(e){}}
 
 // AUDIO
@@ -771,7 +775,7 @@ function startBreath(id){
   var url=NATURE[Math.floor(Math.random()*NATURE.length)];var bg=document.getElementById('bsbg');var i=new Image();i.onload=function(){bg.src=url;};i.src=url;
   acquireWL();
   actMusic('piano-calm');
-  _speak('Comenzamos. Sigue mi voz.');
+  _say('comenzamos','Comenzamos. Sigue mi voz.');
   tickB();
 }
 function stopBreath(){BS.running=false;_stopVoice();clearTimeout(BS.to);document.getElementById('bso').classList.remove('open');releaseWL();if(_breathMusic){try{stopMusic();}catch(e){}_breathMusic=false;}if(BS.tech)finish(BS.tech.name,'respiracion',3,20);}
@@ -803,7 +807,7 @@ function tickB(){
   var ring=document.getElementById('bc-ring'),ring2=document.getElementById('bc-ring2');
   if(p.t==='hold'){ring.classList.add('active');ring2.classList.add('active');}
   else{ring.classList.remove('active');ring2.classList.remove('active');}
-  ph.textContent=p.n;_speak(p.n);rd.textContent='Resp '+(BS.cycle+1)+' / '+t.cycles+(t.rounds?' · R'+BS.round:'');
+  ph.textContent=p.n;(function(){var k=_pkey(p.n);if(k)_say(k,p.n);else _speak(p.n);})();rd.textContent='Resp '+(BS.cycle+1)+' / '+t.cycles+(t.rounds?' · R'+BS.round:'');
   if(p.d>2){var cs=Math.round(p.d);(function cdd(){if(!BS.running)return;cn.textContent=cs;if(cs<=0){advB();return;}cs--;BS.to=setTimeout(cdd,1000);})();}
   else{cn.textContent='';BS.to=setTimeout(advB,p.d*1000);}
 }
@@ -834,33 +838,90 @@ function togYogaAudio(){if(CurAudio){stopMusic();_breathMusic=false;}else actMus
 // MEDITATION
 var MED={running:false,dur:5*60,elapsed:0,iv:null,ph:0};
 window.App=window.App||{};
-function openMed(){om('mo-med');document.getElementById('med-sel').style.display='';document.getElementById('med-running').style.display='none';document.getElementById('med-cnt').textContent='—';document.getElementById('med-ph').textContent='Prepárate';document.getElementById('med-info').textContent='';MED.dur=5*60;MED.elapsed=0;}
+function renderMedList(){document.getElementById('med-list').innerHTML=MEDITATIONS.map(function(m){return '<button class="med-item" onclick="App.startMed(\''+m.id+'\')"><div class="mnm">'+m.name+'</div><div class="msb">'+m.sub+'</div></button>';}).join('');}
+function openMed(){om('mo-med');renderMedList();document.getElementById('med-sel').style.display='';document.getElementById('med-running').style.display='none';document.getElementById('med-cnt').textContent='';document.getElementById('med-ph').textContent='Prepárate';document.getElementById('med-info').textContent='';MED.elapsed=0;}
 function setMedDur(min,el){MED.dur=min*60;document.querySelectorAll('#med-sel .chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');}
 var MED_GUIDE=['Ponte comodo y cierra los ojos suavemente.','Lleva la atencion a tu respiracion, sin forzarla.','Inhala despacio por la nariz, y suelta el aire poco a poco.','Relaja los hombros. Deja caer cualquier tension.','Afloja la mandibula, la frente y alrededor de los ojos.','Si tu mente se distrae, vuelve con calma a la respiracion.','Siente como tu cuerpo se afloja con cada exhalacion.','No hay nada que hacer. Solo respirar y estar aqui.','Nota el aire fresco al entrar, y el aire calido al salir.','Permitete este momento de calma. Te lo mereces.'];
-function startMed(){
+var MEDITATIONS=[
+ {id:'sereno',name:'Calma profunda',sub:'Respiracion serena · 5 min',dur:300,script:[
+  {t:1,s:'Ponte comodo y cierra los ojos. Vamos a calmar el cuerpo y la mente.'},
+  {t:30,s:'Inhala despacio por la nariz, y suelta el aire poco a poco.'},
+  {t:70,s:'Relaja los hombros. Deja caer cualquier tension.'},
+  {t:115,s:'Si tu mente se distrae, vuelve con calma a la respiracion.'},
+  {t:160,s:'Siente como tu cuerpo se afloja con cada exhalacion.'},
+  {t:210,s:'Permitete este momento de calma. Te lo mereces.'},
+  {t:260,s:'Nota tu respiracion, tranquila y natural.'},
+  {t:288,s:'Vamos terminando. Vuelve poco a poco y abre los ojos.'}]},
+ {id:'expandida',name:'Conciencia expandida',sub:'Mas alla del cuerpo · 8 min',dur:480,script:[
+  {t:1,s:'Cierra los ojos. Deja que tu cuerpo se asiente, pesado y tranquilo.'},
+  {t:30,s:'Respira de forma natural. No hay nada que corregir, solo observar.'},
+  {t:70,s:'Lleva la atencion al aire que entra y sale por tu nariz.'},
+  {t:115,s:'Con cada exhalacion, suelta un poco mas. Los hombros, la cara, las manos.'},
+  {t:160,s:'Ahora amplia tu atencion. Siente todo tu cuerpo a la vez, como un solo campo.'},
+  {t:215,s:'Nota el espacio a tu alrededor. Los sonidos, el aire, la habitacion entera.'},
+  {t:270,s:'Deja que tu conciencia se expanda mas alla de la piel, sin limites.'},
+  {t:325,s:'No eres solo el cuerpo. Eres el espacio consciente donde todo ocurre.'},
+  {t:380,s:'Descansa en esa amplitud. Vasta, silenciosa, despierta.'},
+  {t:430,s:'Permanece aqui, sin buscar nada. Solo presencia.'},
+  {t:465,s:'Vuelve poco a poco. Siente de nuevo el cuerpo. Abre los ojos cuando quieras.'}]},
+ {id:'testigo',name:'El testigo',sub:'La conciencia que observa · 7 min',dur:420,script:[
+  {t:1,s:'Cierra los ojos y respira despacio, tres veces.'},
+  {t:35,s:'Observa tus pensamientos como nubes que pasan por el cielo.'},
+  {t:80,s:'No los sigas ni los empujes. Solo mira como aparecen y se van.'},
+  {t:130,s:'Pregunta en silencio: quien esta observando estos pensamientos?'},
+  {t:185,s:'Detras de cada pensamiento hay algo que no cambia. Una presencia que solo mira.'},
+  {t:240,s:'Eso que observa no nace ni se altera. Es tu conciencia, siempre aqui.'},
+  {t:300,s:'Descansa como el testigo. No lo que aparece, sino aquello que lo contempla.'},
+  {t:360,s:'Todo cambia frente a ti, pero tu, la conciencia, permaneces.'},
+  {t:405,s:'Vuelve con calma. Lleva esta quietud contigo. Abre los ojos.'}]},
+ {id:'luz',name:'Cuerpo de luz',sub:'Relajacion total · 10 min',dur:600,script:[
+  {t:1,s:'Tumbate o sientate comodo. Deja que el cuerpo se hunda en el suelo.'},
+  {t:35,s:'Lleva la atencion a los pies. Sientelos, y dejalos pesados y calidos.'},
+  {t:90,s:'Sube a las piernas. Se aflojan, se sueltan, se funden con el suelo.'},
+  {t:150,s:'El vientre y el pecho suben y bajan solos, sin esfuerzo.'},
+  {t:210,s:'Los brazos y las manos, pesados. La espalda, ancha y tranquila.'},
+  {t:270,s:'El cuello se suelta. La cara se afloja: mandibula, mejillas, frente.'},
+  {t:330,s:'Todo el cuerpo descansa. Imagina una luz calida en tu pecho.'},
+  {t:390,s:'Con cada respiracion, esa luz crece y llena todo tu cuerpo.'},
+  {t:450,s:'Eres un cuerpo de luz, sereno y luminoso, sin tension.'},
+  {t:510,s:'Descansa en esta paz. No hay nada que hacer, ningun lugar donde ir.'},
+  {t:560,s:'Empieza a mover los dedos muy despacio. Vuelve al cuerpo.'},
+  {t:585,s:'Respira hondo. Abre los ojos cuando estes listo.'}]},
+ {id:'unidad',name:'Disolver los limites',sub:'No separacion · 7 min',dur:420,script:[
+  {t:1,s:'Cierra los ojos. Respira lento y siente todo el cuerpo a la vez.'},
+  {t:40,s:'Nota donde termina tu cuerpo y empieza el aire. Ese limite es suave.'},
+  {t:95,s:'En cada exhalacion, deja que ese borde se difumine un poco mas.'},
+  {t:150,s:'El que respira y el aire respirado son parte de lo mismo.'},
+  {t:210,s:'Suelta la idea de ser algo separado. Solo hay experiencia, ocurriendo.'},
+  {t:270,s:'Silencio. Amplitud. Nada que sostener, nadie que sostenga.'},
+  {t:330,s:'Descansa en esa union, tranquila y completa.'},
+  {t:390,s:'Vuelve poco a poco a ti. Respira, y abre los ojos con calma.'}]}
+];
+
+function startMed(medId){
+  var med=MEDITATIONS.filter(function(m){return m.id===medId;})[0]||MEDITATIONS[0];
+  MED.med=med;MED.dur=med.dur;MED.script=med.script.slice();
+  document.getElementById('med-info').textContent=med.name;
   document.getElementById('med-sel').style.display='none';document.getElementById('med-running').style.display='';
-  MED.running=true;MED.elapsed=0;MED.ph=0;MED.gi=0;acquireWL();actMusic('piano-calm');setTimeout(function(){if(MED.running)_speakSlow('Bienvenido. Ponte comodo y respira. Yo te guio.');},700);
-  var phases=[{n:'Inhala',d:4,t:'in'},{n:'Aguanta',d:4,t:'hold'},{n:'Exhala',d:6,t:'out'},{n:'Pausa',d:2,t:'hold'}];
-  var pIdx=0,pSec=phases[0].d;
+  MED.running=true;MED.elapsed=0;acquireWL();actMusic('piano-calm');
   function tick(){
     if(!MED.running)return;
-    var p=phases[pIdx];var circ=document.getElementById('med-circle');
-    document.getElementById('med-ph').textContent=p.n;document.getElementById('med-cnt').textContent=pSec;
-    circ.className='med-circle'+(p.t==='in'?' in':p.t==='out'?' out':'');
+    var circ=document.getElementById('med-circle');
+    var cyc=MED.elapsed%10;
+    document.getElementById('med-ph').textContent=cyc<4?'Inhala':(cyc<9?'Exhala':'Suelta');
+    document.getElementById('med-cnt').textContent='';
+    circ.className='med-circle'+(cyc<4?' in':' out');
     var pct=MED.elapsed/MED.dur*100;document.getElementById('med-bar').style.width=Math.min(100,pct)+'%';
     var rem=MED.dur-MED.elapsed,m=Math.floor(rem/60),s=rem%60;
     document.getElementById('med-elapsed').textContent='Quedan '+m+':'+(s<10?'0':'')+s;
     if(MED.elapsed>=MED.dur){stopMed();return;}
-    var rem2=MED.dur-MED.elapsed;
-    if(rem2===10){_speakSlow('Vamos terminando. Vuelve poco a poco, y abre los ojos cuando quieras.');}
-    else if(MED.elapsed>0 && MED.elapsed%28===8){_speakSlow(MED_GUIDE[MED.gi%MED_GUIDE.length]);MED.gi++;}
-    MED.elapsed++;pSec--;
-    if(pSec<=0){pIdx=(pIdx+1)%phases.length;pSec=phases[pIdx].d;}
+    for(var i=0;i<MED.script.length;i++){if(MED.script[i].t===MED.elapsed){_say(MED.med.id+'-'+(i+1),MED.script[i].s);break;}}
+    MED.elapsed++;
     MED.iv=setTimeout(tick,1000);
   }
   tick();
 }
-function stopMed(){MED.running=false;_stopVoice();clearTimeout(MED.iv);releaseWL();actStop();cm('mo-med');if(MED.elapsed>30)finish('Meditación','meditacion',Math.ceil(MED.elapsed/60),10);}
+function stopMed(){MED.running=false;_stopVoice();clearTimeout(MED.iv);releaseWL();actStop();cm('mo-med');if(MED.elapsed>30)finish((MED.med&&MED.med.name)||'Meditación','meditacion',Math.ceil(MED.elapsed/60),10);}
 
 // BOLT
 var BL={iv:null,s:0};
@@ -882,17 +943,17 @@ function show(id,v){document.getElementById(id).style.display=v?'':'none';}
 
 // COLD
 var COLD={running:false,si:0,st:0,iv:null};
-function _coldSay(n){var s=(n||'').toLowerCase();if(s.indexOf('muy')>=0)_speak('Agua muy fria. Manten la calma, respira despacio y relaja los hombros.');else if(s.indexOf('fria')>=0||s.indexOf('fría')>=0)_speak('Agua fria. Respira lento y profundo. Sueltate en el frio, no contengas el aire.');else _speak('Agua caliente. Recuperate y respira tranquilo.');}
+function _coldSay(n){var s=(n||'').toLowerCase();if(s.indexOf('muy')>=0)_say('cold-muyfria','Agua muy fria. Manten la calma, respira despacio y relaja los hombros.');else if(s.indexOf('fria')>=0||s.indexOf('fría')>=0)_say('cold-fria','Agua fria. Respira lento y profundo. Sueltate en el frio, no contengas el aire.');else _say('cold-caliente','Agua caliente. Recuperate y respira tranquilo.');}
 function coldToggle(){
   if(COLD.running){clearInterval(COLD.iv);COLD.running=false;_stopVoice();actStop();document.getElementById('cbtn').textContent='▶ Comenzar';document.getElementById('cdisp').textContent='0:00';return;}
   COLD.running=true;COLD.si=0;COLD.st=COLD_ST[0].d;document.getElementById('cbtn').textContent='⏹ Detener';
-  actMusic('piano-calm');_speak('Vamos con la ducha de contraste. Yo te guio. Respira siempre lento.');setTimeout(function(){if(COLD.running)_coldSay(COLD_ST[0].n);},4200);
+  actMusic('piano-calm');_say('cold-intro','Vamos con la ducha de contraste. Yo te guio. Respira siempre lento.');setTimeout(function(){if(COLD.running)_coldSay(COLD_ST[0].n);},4200);
   renderCold();
   COLD.iv=setInterval(function(){
     COLD.st--;var m=Math.floor(COLD.st/60),s=COLD.st%60;
     document.getElementById('cdisp').textContent=m+':'+(s<10?'0':'')+s;
     renderCold();
-    if(COLD.st<=0){vib([200]);COLD.si++;if(COLD.si>=COLD_ST.length){clearInterval(COLD.iv);COLD.running=false;document.getElementById('cbtn').textContent='▶ Comenzar';document.getElementById('cdisp').textContent='✓ Listo';S.cold=(S.cold||0)+1;S.coldWeek=(S.coldWeek||0)+1;saveS();_stopVoice();actStop();_speak('Muy bien. Ducha completada. Nota el calor y la energia en tu cuerpo.');tip('¡Ducha fría completada!');checkBadges();return;}COLD.st=COLD_ST[COLD.si].d;_coldSay(COLD_ST[COLD.si].n);}
+    if(COLD.st<=0){vib([200]);COLD.si++;if(COLD.si>=COLD_ST.length){clearInterval(COLD.iv);COLD.running=false;document.getElementById('cbtn').textContent='▶ Comenzar';document.getElementById('cdisp').textContent='✓ Listo';S.cold=(S.cold||0)+1;S.coldWeek=(S.coldWeek||0)+1;saveS();_stopVoice();actStop();_say('cold-fin','Muy bien. Ducha completada. Nota el calor y la energia en tu cuerpo.');tip('¡Ducha fría completada!');checkBadges();return;}COLD.st=COLD_ST[COLD.si].d;_coldSay(COLD_ST[COLD.si].n);}
   },1000);
 }
 function renderCold(){var h='';COLD_ST.forEach(function(st,i){var act=i===COLD.si&&COLD.running;var m=Math.floor(st.d/60),s=st.d%60;var lbl=act?Math.floor(COLD.st/60)+':'+(COLD.st%60<10?'0':'')+COLD.st%60:m+':'+(s<10?'0':'')+s;h+='<div class="cold-s'+(act?' act':'')+'"><span style="font-size:20px">'+ico(st.i)+'</span><div style="flex:1"><div style="font-weight:600;font-size:13px">'+st.n+'</div><div style="font-size:11px;color:var(--tx2)">'+lbl+'</div></div></div>';});document.getElementById('cstages').innerHTML=h;}
