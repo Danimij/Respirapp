@@ -681,7 +681,8 @@ function xpLevelSize(xp){var lv=calcLevel(xp);var base=XP_LEVELS[lv-1]||0;var ne
 // STATE
 var S={sessions:0,streak:0,lastDate:null,bestBolt:0,lastMood:0,history:[],wim:0,yoga:0,cold:0,uniq:[],totalMin:0,xp:0,wimWeek:0,yogaWeek:0,coldWeek:0,lessonsDone:[],premium:false,usedCodes:[],plan30done:[],freezeMonth:null,goal:'',bestStreak:0};
 function loadS(){try{Object.assign(S,JSON.parse(localStorage.getItem('inspirapp-v1')||'{}'));}catch(e){}}
-var _voiceOn=localStorage.getItem('inspi-voice')!=='0';function _speak(t){if(!_voiceOn||typeof speechSynthesis==='undefined'||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.92;speechSynthesis.speak(u);}catch(e){}}function _stopVoice(){if(typeof speechSynthesis!=='undefined'){try{speechSynthesis.cancel();}catch(e){}}}function togVoice(){_voiceOn=!_voiceOn;localStorage.setItem('inspi-voice',_voiceOn?'1':'0');if(!_voiceOn)_stopVoice();else _speak('Voz activada');var b=document.getElementById('bvoice');if(b)b.classList.toggle('sel',_voiceOn);}window.togVoice=togVoice;
+var _voiceOn=localStorage.getItem('inspi-voice')!=='0';function _speak(t){if(!_voiceOn||typeof speechSynthesis==='undefined'||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.92;speechSynthesis.speak(u);}catch(e){}}function _speakSlow(t){if(!_voiceOn||typeof speechSynthesis==='undefined'||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.82;u.pitch=1;speechSynthesis.speak(u);}catch(e){}}
+function _stopVoice(){if(typeof speechSynthesis!=='undefined'){try{speechSynthesis.cancel();}catch(e){}}}function togVoice(){_voiceOn=!_voiceOn;localStorage.setItem('inspi-voice',_voiceOn?'1':'0');if(!_voiceOn)_stopVoice();else _speak('Voz activada');var b=document.getElementById('bvoice');if(b)b.classList.toggle('sel',_voiceOn);}window.togVoice=togVoice;
 function saveS(){try{localStorage.setItem('inspirapp-v1',JSON.stringify(S));}catch(e){}}
 
 // AUDIO
@@ -816,10 +817,10 @@ function startYoga(id){
   YS.sess=sess;YS.pi=0;document.getElementById('ysn').textContent=sess.name;
   document.getElementById('yso').classList.add('open');acquireWL();actMusic('lounge');showPose();
 }
-function stopYoga(){clearInterval(YS.iv);document.getElementById('yso').classList.remove('open');releaseWL();actStop();if(YS.sess){S.yoga=(S.yoga||0)+1;S.yogaWeek=(S.yogaWeek||0)+1;saveS();finish(YS.sess.name,'yoga',Math.ceil(YS.sess.poses.reduce(function(a,p){return a+p.d;},0)/60),15);}}
+function stopYoga(){clearInterval(YS.iv);_stopVoice();document.getElementById('yso').classList.remove('open');releaseWL();actStop();if(YS.sess){S.yoga=(S.yoga||0)+1;S.yogaWeek=(S.yogaWeek||0)+1;saveS();finish(YS.sess.name,'yoga',Math.ceil(YS.sess.poses.reduce(function(a,p){return a+p.d;},0)/60),15);}}
 function showPose(){clearInterval(YS.iv);var poses=YS.sess.poses,p=poses[YS.pi];
   document.getElementById('ysvg').src=poseImg(p.s);
-  document.getElementById('ypn').textContent=p.n;document.getElementById('ypc').textContent=p.c;
+  document.getElementById('ypn').textContent=p.n;document.getElementById('ypc').textContent=p.c;_speak(p.n+'. '+p.c);
   document.getElementById('ypf').style.width=(YS.pi/poses.length*100)+'%';
   document.getElementById('ypl').textContent=(YS.pi+1)+' / '+poses.length;
   document.getElementById('ynb').textContent=YS.pi<poses.length-1?'Siguiente →':'Terminar';
@@ -835,9 +836,10 @@ var MED={running:false,dur:5*60,elapsed:0,iv:null,ph:0};
 window.App=window.App||{};
 function openMed(){om('mo-med');document.getElementById('med-sel').style.display='';document.getElementById('med-running').style.display='none';document.getElementById('med-cnt').textContent='—';document.getElementById('med-ph').textContent='Prepárate';document.getElementById('med-info').textContent='';MED.dur=5*60;MED.elapsed=0;}
 function setMedDur(min,el){MED.dur=min*60;document.querySelectorAll('#med-sel .chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');}
+var MED_GUIDE=['Ponte comodo y cierra los ojos suavemente.','Lleva la atencion a tu respiracion, sin forzarla.','Inhala despacio por la nariz, y suelta el aire poco a poco.','Relaja los hombros. Deja caer cualquier tension.','Afloja la mandibula, la frente y alrededor de los ojos.','Si tu mente se distrae, vuelve con calma a la respiracion.','Siente como tu cuerpo se afloja con cada exhalacion.','No hay nada que hacer. Solo respirar y estar aqui.','Nota el aire fresco al entrar, y el aire calido al salir.','Permitete este momento de calma. Te lo mereces.'];
 function startMed(){
   document.getElementById('med-sel').style.display='none';document.getElementById('med-running').style.display='';
-  MED.running=true;MED.elapsed=0;MED.ph=0;acquireWL();actMusic('piano-calm');
+  MED.running=true;MED.elapsed=0;MED.ph=0;MED.gi=0;acquireWL();actMusic('piano-calm');setTimeout(function(){if(MED.running)_speakSlow('Bienvenido. Ponte comodo y respira. Yo te guio.');},700);
   var phases=[{n:'Inhala',d:4,t:'in'},{n:'Aguanta',d:4,t:'hold'},{n:'Exhala',d:6,t:'out'},{n:'Pausa',d:2,t:'hold'}];
   var pIdx=0,pSec=phases[0].d;
   function tick(){
@@ -849,13 +851,16 @@ function startMed(){
     var rem=MED.dur-MED.elapsed,m=Math.floor(rem/60),s=rem%60;
     document.getElementById('med-elapsed').textContent='Quedan '+m+':'+(s<10?'0':'')+s;
     if(MED.elapsed>=MED.dur){stopMed();return;}
+    var rem2=MED.dur-MED.elapsed;
+    if(rem2===10){_speakSlow('Vamos terminando. Vuelve poco a poco, y abre los ojos cuando quieras.');}
+    else if(MED.elapsed>0 && MED.elapsed%28===8){_speakSlow(MED_GUIDE[MED.gi%MED_GUIDE.length]);MED.gi++;}
     MED.elapsed++;pSec--;
     if(pSec<=0){pIdx=(pIdx+1)%phases.length;pSec=phases[pIdx].d;}
     MED.iv=setTimeout(tick,1000);
   }
   tick();
 }
-function stopMed(){MED.running=false;clearTimeout(MED.iv);releaseWL();actStop();cm('mo-med');if(MED.elapsed>30)finish('Meditación','meditacion',Math.ceil(MED.elapsed/60),10);}
+function stopMed(){MED.running=false;_stopVoice();clearTimeout(MED.iv);releaseWL();actStop();cm('mo-med');if(MED.elapsed>30)finish('Meditación','meditacion',Math.ceil(MED.elapsed/60),10);}
 
 // BOLT
 var BL={iv:null,s:0};
@@ -877,15 +882,17 @@ function show(id,v){document.getElementById(id).style.display=v?'':'none';}
 
 // COLD
 var COLD={running:false,si:0,st:0,iv:null};
+function _coldSay(n){var s=(n||'').toLowerCase();if(s.indexOf('muy')>=0)_speak('Agua muy fria. Manten la calma, respira despacio y relaja los hombros.');else if(s.indexOf('fria')>=0||s.indexOf('fría')>=0)_speak('Agua fria. Respira lento y profundo. Sueltate en el frio, no contengas el aire.');else _speak('Agua caliente. Recuperate y respira tranquilo.');}
 function coldToggle(){
-  if(COLD.running){clearInterval(COLD.iv);COLD.running=false;document.getElementById('cbtn').textContent='▶ Comenzar';document.getElementById('cdisp').textContent='0:00';return;}
+  if(COLD.running){clearInterval(COLD.iv);COLD.running=false;_stopVoice();actStop();document.getElementById('cbtn').textContent='▶ Comenzar';document.getElementById('cdisp').textContent='0:00';return;}
   COLD.running=true;COLD.si=0;COLD.st=COLD_ST[0].d;document.getElementById('cbtn').textContent='⏹ Detener';
+  actMusic('piano-calm');_speak('Vamos con la ducha de contraste. Yo te guio. Respira siempre lento.');setTimeout(function(){if(COLD.running)_coldSay(COLD_ST[0].n);},4200);
   renderCold();
   COLD.iv=setInterval(function(){
     COLD.st--;var m=Math.floor(COLD.st/60),s=COLD.st%60;
     document.getElementById('cdisp').textContent=m+':'+(s<10?'0':'')+s;
     renderCold();
-    if(COLD.st<=0){vib([200]);COLD.si++;if(COLD.si>=COLD_ST.length){clearInterval(COLD.iv);COLD.running=false;document.getElementById('cbtn').textContent='▶ Comenzar';document.getElementById('cdisp').textContent='✓ Listo';S.cold=(S.cold||0)+1;S.coldWeek=(S.coldWeek||0)+1;saveS();tip('¡Ducha fría completada!');checkBadges();return;}COLD.st=COLD_ST[COLD.si].d;}
+    if(COLD.st<=0){vib([200]);COLD.si++;if(COLD.si>=COLD_ST.length){clearInterval(COLD.iv);COLD.running=false;document.getElementById('cbtn').textContent='▶ Comenzar';document.getElementById('cdisp').textContent='✓ Listo';S.cold=(S.cold||0)+1;S.coldWeek=(S.coldWeek||0)+1;saveS();_stopVoice();actStop();_speak('Muy bien. Ducha completada. Nota el calor y la energia en tu cuerpo.');tip('¡Ducha fría completada!');checkBadges();return;}COLD.st=COLD_ST[COLD.si].d;_coldSay(COLD_ST[COLD.si].n);}
   },1000);
 }
 function renderCold(){var h='';COLD_ST.forEach(function(st,i){var act=i===COLD.si&&COLD.running;var m=Math.floor(st.d/60),s=st.d%60;var lbl=act?Math.floor(COLD.st/60)+':'+(COLD.st%60<10?'0':'')+COLD.st%60:m+':'+(s<10?'0':'')+s;h+='<div class="cold-s'+(act?' act':'')+'"><span style="font-size:20px">'+ico(st.i)+'</span><div style="flex:1"><div style="font-weight:600;font-size:13px">'+st.n+'</div><div style="font-size:11px;color:var(--tx2)">'+lbl+'</div></div></div>';});document.getElementById('cstages').innerHTML=h;}
