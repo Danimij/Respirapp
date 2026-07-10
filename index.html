@@ -895,7 +895,29 @@ var MEDITATIONS=[
   {t:210,s:'Suelta la idea de ser algo separado. Solo hay experiencia, ocurriendo.'},
   {t:270,s:'Silencio. Amplitud. Nada que sostener, nadie que sostenga.'},
   {t:330,s:'Descansa en esa union, tranquila y completa.'},
-  {t:390,s:'Vuelve poco a poco a ti. Respira, y abre los ojos con calma.'}]}
+  {t:390,s:'Vuelve poco a poco a ti. Respira, y abre los ojos con calma.'}]},
+ {id:'sinesfuerzo',name:'Meditacion sin esfuerzo',sub:'Deja que la mente se calme sola · 9 min',dur:540,script:[
+  {t:1,s:'Sientate comodo, con la espalda recta pero sin tension. Cierra los ojos.'},
+  {t:35,s:'No vas a hacer nada. No vas a concentrarte ni forzar. Solo vas a permitir.'},
+  {t:85,s:'Deja que la respiracion vaya a su aire. Ni la controles ni la sigas.'},
+  {t:140,s:'Si aparecen pensamientos, esta bien. No luches con ellos. Dejalos pasar.'},
+  {t:200,s:'Cada vez que te des cuenta de que piensas, vuelve, sin esfuerzo, al silencio.'},
+  {t:260,s:'La mente se calma sola cuando dejas de empujar. Permite que se asiente.'},
+  {t:320,s:'No busques ningun estado especial. Lo que hay ahora es suficiente.'},
+  {t:385,s:'Descansa en ese no hacer. Quieto, abierto, sin meta.'},
+  {t:450,s:'Cuanto menos intentas, mas profundo es el silencio.'},
+  {t:510,s:'Vuelve poco a poco. Sin prisa. Abre los ojos cuando quieras.'}]},
+ {id:'concienciapura',name:'Conciencia pura',sub:'La conciencia que se conoce · 10 min',dur:600,script:[
+  {t:1,s:'Cierra los ojos y respira con calma unas cuantas veces.'},
+  {t:40,s:'Nota que hay pensamientos, sonidos y sensaciones. Y algo que los conoce a todos.'},
+  {t:100,s:'Eso que conoce, que es consciente, no es un pensamiento. Es anterior a ellos.'},
+  {t:160,s:'No lo busques como un objeto. Es aquello que esta mirando ahora mismo.'},
+  {t:225,s:'Deja de prestar atencion a lo que aparece, y repara en la atencion misma.'},
+  {t:290,s:'Conciencia siendo consciente de si misma. Silenciosa, despierta, sin forma.'},
+  {t:355,s:'No tiene bordes ni centro. No es tuya: tu apareces en ella.'},
+  {t:420,s:'Descansa como esa conciencia pura. No hay nada que alcanzar. Ya eres eso.'},
+  {t:490,s:'Permanece aqui, en la quietud que todo lo contiene.'},
+  {t:555,s:'Cuando estes listo, vuelve despacio. Trae contigo esta presencia. Abre los ojos.'}]}
 ];
 
 function startMed(medId){
@@ -903,7 +925,15 @@ function startMed(medId){
   MED.med=med;MED.dur=med.dur;MED.script=med.script.slice();
   document.getElementById('med-info').textContent=med.name;
   document.getElementById('med-sel').style.display='none';document.getElementById('med-running').style.display='';
-  MED.running=true;MED.elapsed=0;acquireWL();actMusic('piano-calm');
+  MED.running=true;MED.elapsed=0;MED.narration=null;acquireWL();actMusic('piano-calm');
+  // Try a single continuous narration recording (audio/med-<id>.mp3). If present,
+  // it becomes the guide and sets the duration; otherwise fall back to TTS cues.
+  if(_voiceOn){try{var nar=new Audio('audio/med-'+med.id+'.mp3');
+    nar.addEventListener('loadedmetadata',function(){if(MED.running&&nar.duration&&isFinite(nar.duration)){MED.narration=nar;MED.dur=Math.ceil(nar.duration)+3;}});
+    nar.addEventListener('ended',function(){if(MED.running)stopMed();});
+    nar.addEventListener('error',function(){MED.narration=null;});
+    nar.play().then(function(){MED.narration=nar;}).catch(function(){MED.narration=null;});
+  }catch(e){MED.narration=null;}}
   function tick(){
     if(!MED.running)return;
     var circ=document.getElementById('med-circle');
@@ -912,16 +942,16 @@ function startMed(medId){
     document.getElementById('med-cnt').textContent='';
     circ.className='med-circle'+(cyc<4?' in':' out');
     var pct=MED.elapsed/MED.dur*100;document.getElementById('med-bar').style.width=Math.min(100,pct)+'%';
-    var rem=MED.dur-MED.elapsed,m=Math.floor(rem/60),s=rem%60;
+    var rem=Math.max(0,MED.dur-MED.elapsed),m=Math.floor(rem/60),s=rem%60;
     document.getElementById('med-elapsed').textContent='Quedan '+m+':'+(s<10?'0':'')+s;
     if(MED.elapsed>=MED.dur){stopMed();return;}
-    for(var i=0;i<MED.script.length;i++){if(MED.script[i].t===MED.elapsed){_say(MED.med.id+'-'+(i+1),MED.script[i].s);break;}}
+    if(!MED.narration){for(var i=0;i<MED.script.length;i++){if(MED.script[i].t===MED.elapsed){_speakSlow(MED.script[i].s);break;}}}
     MED.elapsed++;
     MED.iv=setTimeout(tick,1000);
   }
   tick();
 }
-function stopMed(){MED.running=false;_stopVoice();clearTimeout(MED.iv);releaseWL();actStop();cm('mo-med');if(MED.elapsed>30)finish((MED.med&&MED.med.name)||'Meditación','meditacion',Math.ceil(MED.elapsed/60),10);}
+function stopMed(){MED.running=false;if(MED.narration){try{MED.narration.pause();}catch(e){}MED.narration=null;}_stopVoice();clearTimeout(MED.iv);releaseWL();actStop();cm('mo-med');if(MED.elapsed>30)finish((MED.med&&MED.med.name)||'Meditación','meditacion',Math.ceil(MED.elapsed/60),10);}
 
 // BOLT
 var BL={iv:null,s:0};
