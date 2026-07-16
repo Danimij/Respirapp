@@ -1,24 +1,32 @@
 {
-  "name": "RespirApp",
-  "short_name": "RespirApp",
-  "description": "Técnicas de respiración y meditación guiada",
+  "name": "INSPIRAPP",
+  "short_name": "INSPIRAPP",
+  "description": "Respiración, biohacking y hábitos con ciencia detrás",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#e8f0e5",
-  "theme_color": "#3d8b6e",
+  "background_color": "#1e3528",
+  "theme_color": "#3a7d57",
   "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "id": "/Respirapp/",
+  "scope": "./"
 }
