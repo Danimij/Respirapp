@@ -42,13 +42,13 @@ body{display:flex;flex-direction:column;}
 .cbadge{position:absolute;top:9px;right:9px;z-index:2;font-size:10px;font-weight:700;background:rgba(0,0,0,.45);color:#fff;padding:3px 9px;border-radius:7px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
 .cb{flex:1;} .ct{font-weight:600;font-size:14px;color:var(--tx);} .cd{font-size:11px;color:var(--tx2);margin-top:2px;line-height:1.4;}
 .badge{background:var(--ac);color:#fff;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;white-space:nowrap;}
-.rc{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-radius:18px;padding:18px;margin-bottom:10px;cursor:pointer;}
+.rc{background:var(--surface);color:var(--tx);border:1px solid var(--br);border-radius:18px;padding:18px;margin-bottom:10px;cursor:pointer;box-shadow:var(--sh);}.rc svg circle{stroke:var(--bg2);}.rc svg #rarc{stroke:var(--ac);}
 .rr{display:flex;align-items:center;justify-content:space-between;}
-.rs{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:600;line-height:1;}
-.rl{font-size:11px;opacity:.85;margin-top:3px;}
-.rg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px;}
-.rst{background:rgba(255,255,255,.2);border-radius:9px;padding:7px 9px;}
-.rsv{font-size:17px;font-weight:700;} .rsl{font-size:10px;opacity:.8;margin-top:1px;}
+.rs{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:600;line-height:1;color:var(--ac);}
+.rl{font-size:11px;color:var(--tx2);margin-top:3px;}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;}
+.rst{background:var(--s2);border:1px solid var(--br);border-radius:10px;padding:9px 11px;}
+.rsv{font-size:18px;font-weight:700;color:var(--tx);} .rsl{font-size:10px;color:var(--tx2);margin-top:1px;}
 .sg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
 .sd{aspect-ratio:1;border-radius:3px;background:var(--bg2);border:1px solid var(--br);}
 .sd.done{background:var(--ac);border-color:var(--ac);} .sd.today{border:2px solid var(--ac2);}
@@ -114,8 +114,8 @@ body{display:flex;flex-direction:column;}
 .ib2 p{font-size:12px;color:var(--tx2);line-height:1.6;}
 .toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--tx);color:#fff;padding:9px 18px;border-radius:18px;font-size:12px;opacity:0;pointer-events:none;transition:all .3s;z-index:500;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.fc{background:linear-gradient(135deg,var(--ac2),var(--ac));border-radius:14px;padding:14px;color:#fff;margin-bottom:10px;cursor:pointer;}
-.ft{font-size:12px;line-height:1.6;opacity:.95;} .fs{font-size:10px;opacity:.7;margin-top:4px;}
+.fc{background:var(--s2);border:1px solid var(--br);border-left:3px solid var(--ac);border-radius:14px;padding:14px 16px;color:var(--tx2);margin-bottom:10px;cursor:pointer;}
+.ft{font-size:12.5px;line-height:1.6;color:var(--tx);} .fs{font-size:10px;color:var(--tx2);margin-top:4px;}
 /* XP bar */
 .xp-bar{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin:6px 0;}
 .xp-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:3px;transition:width .6s ease;}
@@ -314,6 +314,8 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
       <div style="font-size:11px;color:var(--tx2)">Pago único · Sin suscripción · Acceso inmediato</div>
     </div>
     <div id="lessons-list"></div>
+    <a href="https://danimij.github.io/FaceO/academia.html" target="_blank" rel="noopener" style="display:block;text-align:center;background:rgba(58,125,87,.14);border:1px solid rgba(58,125,87,.4);border-radius:16px;padding:15px;color:var(--ac);font-weight:600;font-size:13.5px;text-decoration:none;margin:14px 0 4px">Ver academia completa · 16 lecciones →</a>
+    <div style="text-align:center;font-size:11.5px;color:var(--tx2);margin-bottom:8px">Los 8 pilares + tu rostro, en un solo sitio</div>
     <div class="st" style="margin-top:8px">Tu progreso</div>
     <div class="stat-grid">
       <div class="stat-c"><div class="sv" id="ps">0</div><div class="sl">Sesiones</div></div>
