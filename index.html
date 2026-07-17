@@ -180,6 +180,15 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 </style>
 </head>
 <body>
+<div id="splash"><div class="sp-drop"><svg viewBox="0 0 512 512" width="86" height="86"><path d="M256 118 C256 118 150 250 150 322 a106 106 0 1 0 212 0 C362 250 256 118 256 118 Z" fill="#fff"/></svg></div><div class="sp-word">INSPIRAPP</div></div>
+<style>
+#splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#5aad7c,#2f6b48);transition:opacity .5s ease;}
+#splash.hide{opacity:0;pointer-events:none;}
+#splash .sp-drop{animation:spBreathe 2.4s ease-in-out infinite;}
+#splash .sp-word{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;letter-spacing:.14em;color:#fff;}
+@keyframes spBreathe{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.07);opacity:1}}
+</style>
+<script>window.addEventListener('load',function(){setTimeout(function(){var s=document.getElementById('splash');if(s){s.classList.add('hide');setTimeout(function(){if(s&&s.parentNode)s.parentNode.removeChild(s);},600);}},700);});</script>
 <header id="hdr">
   <div class="logo">INSPIR<span>APP</span></div>
   <div class="hdr-r">
