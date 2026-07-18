@@ -187,7 +187,20 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 #splash .sp-drop{animation:spBreathe 2.4s ease-in-out infinite;}
 #splash .sp-word{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;letter-spacing:.14em;color:#fff;}
 @keyframes spBreathe{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.07);opacity:1}}
+/* Settings rows + toggles */
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0}
+.setlbl{font-size:13.5px;font-weight:600;color:var(--tx)}
+.sethint{font-size:11px;color:var(--tx2);margin-top:2px;max-width:230px;line-height:1.45}
+.tgl{flex-shrink:0;width:46px;height:27px;border-radius:999px;border:none;background:var(--br);cursor:pointer;padding:3px;display:flex;align-items:center;transition:background .2s}
+.tgl span{display:block;width:21px;height:21px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl.on{background:var(--ac)}
+.tgl.on span{transform:translateX(19px)}
+/* Red-light overlay — kills blue/green light to protect melatonin */
+#redfilter{position:fixed;inset:0;z-index:99999;pointer-events:none;background:#ff2200;mix-blend-mode:multiply;display:none}
+body.redmode #redfilter{display:block}
+body.redmode{filter:brightness(.82)}
 </style>
+<div id="redfilter"></div>
 <script>window.addEventListener('load',function(){setTimeout(function(){var s=document.getElementById('splash');if(s){s.classList.add('hide');setTimeout(function(){if(s&&s.parentNode)s.parentNode.removeChild(s);},600);}},700);});</script>
 <header id="hdr">
   <div class="logo">INSPIR<span>APP</span></div>
@@ -274,6 +287,14 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
       <div class="chip" data-f="calma">Calma</div>
       <div class="chip" data-f="rendimiento">Rendimiento</div>
     </div>
+    <div onclick="App.openCustom()" style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--br);border-left:3px solid var(--ac);border-radius:16px;padding:14px 16px;margin-bottom:12px;cursor:pointer;box-shadow:var(--sh)">
+      <span style="flex-shrink:0;width:38px;height:38px;border-radius:11px;background:var(--bg2);display:flex;align-items:center;justify-content:center;color:var(--ac)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20v-6M4 10V4M12 20v-9M12 7V4M20 20v-4M20 12V4M1 14h6M9 7h6M17 16h6"/></svg></span>
+      <span style="flex:1">
+        <span style="display:block;font-weight:700;font-size:14.5px;color:var(--tx)">Tu propia respiración</span>
+        <span style="display:block;font-size:12px;color:var(--tx2)">Crea tu patrón o genera una sesión a medida</span>
+      </span>
+      <span style="flex-shrink:0;color:var(--tx2);font-size:18px">›</span>
+    </div>
     <div id="blist"></div>
   </div>
 </section>
@@ -325,6 +346,15 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
     <div id="lessons-list"></div>
     <a href="https://danimij.github.io/FaceO/academia.html" target="_blank" rel="noopener" style="display:block;text-align:center;background:rgba(58,125,87,.14);border:1px solid rgba(58,125,87,.4);border-radius:16px;padding:15px;color:var(--ac);font-weight:600;font-size:13.5px;text-decoration:none;margin:14px 0 4px">Ver academia completa · 16 lecciones →</a>
     <div style="text-align:center;font-size:11.5px;color:var(--tx2);margin-bottom:8px">Los 8 pilares + tu rostro, en un solo sitio</div>
+    <a href="https://danimij.github.io/FaceO/curso.html" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--br);border-left:3px solid var(--ac);border-radius:16px;padding:14px 16px;text-decoration:none;margin-bottom:10px;box-shadow:var(--sh)">
+      <span style="flex-shrink:0;width:38px;height:38px;border-radius:11px;background:var(--bg2);display:flex;align-items:center;justify-content:center;color:var(--ac)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.55-2.28A1 1 0 0121 8.6v6.8a1 1 0 01-1.45.89L15 14M4 6h9a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg></span>
+      <span style="flex:1">
+        <span style="display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);margin-bottom:2px">Curso · 9 módulos</span>
+        <span style="display:block;font-weight:700;font-size:14.5px;color:var(--tx)">El método completo en 8 semanas</span>
+        <span style="display:block;font-size:12px;color:var(--tx2)">Vídeo, retos semanales y comunidad</span>
+      </span>
+      <span style="flex-shrink:0;color:var(--tx2);font-size:18px">›</span>
+    </a>
     <div class="st" style="margin-top:8px">Tu progreso</div>
     <div class="stat-grid">
       <div class="stat-c"><div class="sv" id="ps">0</div><div class="sl">Sesiones</div></div>
@@ -404,7 +434,7 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
     <div style="color:rgba(255,255,255,.7);font-size:12px" id="brd"></div>
     <div class="bpr"><div class="bpb" id="bpb" style="width:0%"></div></div>
     <div style="color:#fff;font-size:12px;opacity:.75;margin-bottom:8px" id="binf"></div>
-    <div class="ba"><button class="br2 s" onclick="App.stopBreath()">✕ Salir</button><button class="br2 s" id="bvoice" onclick="togVoice()" title="Voz guía" style="flex:0 0 auto;min-width:44px" class="br2 s"><svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z'/><path d='M6 11a6 6 0 0 0 12 0M12 18v3'/></svg></button><button class="br2 s" id="bmute" onclick="togBreathMusic()" title="Música" style="flex:0 0 auto;min-width:44px"><svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V6l10-2v10'/><circle cx='6' cy='18' r='2.6'/><circle cx='16' cy='16' r='2.6'/></svg></button><button class="br2" onclick="App.skipPhase()">Siguiente →</button></div>
+    <div class="ba"><button class="br2 s" onclick="App.stopBreath()">✕ Salir</button><button class="br2 s" id="bvoice" onclick="togVoice()" title="Voz guía" style="flex:0 0 auto;min-width:44px" class="br2 s"><svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z'/><path d='M6 11a6 6 0 0 0 12 0M12 18v3'/></svg></button><button class="br2 s" id="bhaptic" onclick="togHaptic()" title="Vibración" style="flex:0 0 auto;min-width:44px"><svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><rect x='8' y='3' width='8' height='18' rx='2'/><path d='M4 9v6M20 9v6'/></svg></button><button class="br2 s" id="bmute" onclick="togBreathMusic()" title="Música" style="flex:0 0 auto;min-width:44px"><svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V6l10-2v10'/><circle cx='6' cy='18' r='2.6'/><circle cx='16' cy='16' r='2.6'/></svg></button><button class="br2" onclick="App.skipPhase()">Siguiente →</button></div>
   </div>
 </div>
 
@@ -467,13 +497,69 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
       </div>
       <div id="notif-status" style="font-size:11px;color:var(--tx2);margin-bottom:14px"></div>
       <div class="dv"></div>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:8px">Modo noche · protege tu ritmo circadiano</p>
+      <div class="setrow"><div><div class="setlbl">Luz roja</div><div class="sethint">Filtro rojo: elimina la luz azul que frena la melatonina</div></div><button class="tgl" id="tgl-red" onclick="App.toggleRed()"><span></span></button></div>
+      <div class="setrow"><div><div class="setlbl">Práctica a pantalla apagada</div><div class="sethint">Guía solo por sonido: bloquea el móvil y sigue el ritmo con los tonos</div></div><button class="tgl" id="tgl-dark" onclick="App.toggleDarkPractice()"><span></span></button></div>
+      <div class="setrow"><div><div class="setlbl">Mantener pantalla encendida</div><div class="sethint">Evita que se apague durante la sesión</div></div><button class="tgl" id="tgl-wake" onclick="App.toggleWake()"><span></span></button></div>
+      <div class="dv"></div>
       <button class="bf alt" onclick="App.resetData()">Borrar historial</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL MOOD -->
-<div class="mo" id="mo-mood">
+<div class="mo" id="mo-custom">
+  <div class="md"><div class="mh2"></div>
+    <div class="mh"><div class="mt">Tu propia respiración</div><button class="xb" onclick="App.cm('mo-custom')">✕</button></div>
+    <div class="mb">
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:12px">Crea el patrón que te funcione a ti, o deja que te genere una sesión distinta cada vez.</p>
+
+      <div style="font-size:12px;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Sesión a medida</div>
+      <p style="font-size:11.5px;color:var(--tx2);margin-bottom:6px">¿Qué necesitas?</p>
+      <div class="chips" id="gen-goal">
+        <div class="chip on" data-g="calma" onclick="App.setGenGoal('calma')">Calma</div>
+        <div class="chip" data-g="dormir" onclick="App.setGenGoal('dormir')">Dormir</div>
+        <div class="chip" data-g="foco" onclick="App.setGenGoal('foco')">Foco</div>
+        <div class="chip" data-g="energia" onclick="App.setGenGoal('energia')">Energía</div>
+      </div>
+      <p style="font-size:11.5px;color:var(--tx2);margin:10px 0 6px">¿Cuánto tiempo?</p>
+      <div class="chips" id="gen-min">
+        <div class="chip" data-m="2" onclick="App.setGenMin(2)">2 min</div>
+        <div class="chip on" data-m="5" onclick="App.setGenMin(5)">5 min</div>
+        <div class="chip" data-m="10" onclick="App.setGenMin(10)">10 min</div>
+        <div class="chip" data-m="15" onclick="App.setGenMin(15)">15 min</div>
+      </div>
+      <button class="bf" onclick="App.generateSession()" style="width:100%;margin-top:12px">Generar sesión →</button>
+      <p style="font-size:11px;color:var(--tx2);margin-top:6px;text-align:center">Cada vez cambia el ritmo. Nunca dos iguales.</p>
+
+      <div class="dv"></div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Crear mi patrón</div>
+      <input id="cp-name" placeholder="Nombre (ej. Mi 4-7-8)" style="width:100%;padding:11px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:14px;font-family:'Inter',sans-serif;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div><label style="font-size:10.5px;color:var(--tx2);display:block;margin-bottom:3px">Inhala</label><input id="cp-inh" type="number" min="0" max="20" step="0.5" value="4" oninput="App.customPreview()" style="width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:14px;text-align:center;font-family:'Inter',sans-serif"></div>
+        <div><label style="font-size:10.5px;color:var(--tx2);display:block;margin-bottom:3px">Aguanta</label><input id="cp-h1" type="number" min="0" max="30" step="0.5" value="0" oninput="App.customPreview()" style="width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:14px;text-align:center;font-family:'Inter',sans-serif"></div>
+        <div><label style="font-size:10.5px;color:var(--tx2);display:block;margin-bottom:3px">Exhala</label><input id="cp-exh" type="number" min="0" max="20" step="0.5" value="6" oninput="App.customPreview()" style="width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:14px;text-align:center;font-family:'Inter',sans-serif"></div>
+        <div><label style="font-size:10.5px;color:var(--tx2);display:block;margin-bottom:3px">Aguanta</label><input id="cp-h2" type="number" min="0" max="30" step="0.5" value="0" oninput="App.customPreview()" style="width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:14px;text-align:center;font-family:'Inter',sans-serif"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+        <label style="font-size:11.5px;color:var(--tx2);flex-shrink:0">Ciclos</label>
+        <input id="cp-cyc" type="number" min="1" max="100" value="10" oninput="App.customPreview()" style="width:80px;padding:9px;border-radius:9px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:14px;text-align:center;font-family:'Inter',sans-serif">
+        <div id="cp-prev" style="flex:1;text-align:right;font-size:12px;color:var(--ac);font-weight:600"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="bf alt" onclick="App.saveCustom()" style="flex:1;margin:0">Guardar</button>
+        <button class="bf" onclick="App.tryCustom()" style="flex:1;margin:0">Probar ahora →</button>
+      </div>
+
+      <div class="dv"></div>
+      <div style="font-size:12px;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Mis patrones</div>
+      <div id="custom-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mo" id="mo-mood"
   <div class="md"><div class="mh2"></div>
     <div class="mh"><div class="mt">¿Cómo te sientes?</div></div>
     <div class="mb">
@@ -734,6 +820,8 @@ function xpLevelSize(xp){var lv=calcLevel(xp);var base=XP_LEVELS[lv-1]||0;var ne
 // STATE
 var S={sessions:0,streak:0,lastDate:null,bestBolt:0,lastMood:0,history:[],wim:0,yoga:0,cold:0,uniq:[],totalMin:0,xp:0,wimWeek:0,yogaWeek:0,coldWeek:0,lessonsDone:[],premium:false,usedCodes:[],plan30done:[],freezeMonth:null,goal:'',bestStreak:0};
 function loadS(){try{Object.assign(S,JSON.parse(localStorage.getItem('inspirapp-v1')||'{}'));}catch(e){}}
+var _hapticOn=localStorage.getItem('inspi-haptic')!=='0';
+function togHaptic(){_hapticOn=!_hapticOn;localStorage.setItem('inspi-haptic',_hapticOn?'1':'0');if(_hapticOn)vib(40);var b=document.getElementById('bhaptic');if(b)b.classList.toggle('sel',_hapticOn);}window.togHaptic=togHaptic;
 var _voiceOn=localStorage.getItem('inspi-voice')!=='0';function _speak(t){if(!_voiceOn||typeof speechSynthesis==='undefined'||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.92;speechSynthesis.speak(u);}catch(e){}}function _speakSlow(t){if(!_voiceOn||typeof speechSynthesis==='undefined'||!t)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.82;u.pitch=1;speechSynthesis.speak(u);}catch(e){}}
 var _sayEl=null;function _stopSay(){if(_sayEl){try{_sayEl.pause();}catch(e){}_sayEl=null;}}function _say(key,fallback){if(!_voiceOn)return;_stopSay();try{speechSynthesis.cancel();}catch(e){}try{var el=new Audio('audio/'+key+'.mp3');_sayEl=el;el.addEventListener('error',function(){if(_sayEl===el){_speakSlow(fallback);}});el.play().catch(function(){if(_sayEl===el){_speakSlow(fallback);}});}catch(e){_speakSlow(fallback);}}function _pkey(n){var m={'Inhala':'inhala','Exhala':'exhala','Reten':'reten','Aguanta':'aguanta','Pausa':'pausa','Suelta':'exhala'};return m[n]||'';}
 function _stopVoice(){_stopSay();if(typeof speechSynthesis!=='undefined'){try{speechSynthesis.cancel();}catch(e){}}}function togVoice(){_voiceOn=!_voiceOn;localStorage.setItem('inspi-voice',_voiceOn?'1':'0');if(!_voiceOn)_stopVoice();else _speak('Voz activada');var b=document.getElementById('bvoice');if(b)b.classList.toggle('sel',_voiceOn);}window.togVoice=togVoice;
@@ -822,13 +910,19 @@ function startBreath(id){
   BS.tech=t;BS.round=1;BS.cycle=0;BS.pi=0;BS.ret=false;BS.rec=false;BS.running=true;
   document.getElementById('bst').textContent=t.name;
   document.getElementById('bso').classList.add('open');
+  // Reflect current voice/haptic preferences on the session toggles.
+  (function(){var v=document.getElementById('bvoice');if(v)v.classList.toggle('sel',_voiceOn);
+   var h=document.getElementById('bhaptic');if(h)h.classList.toggle('sel',_hapticOn);})();
+  // Night / screen-off support
+  acquireWL();
+  if(_darkOn){keepAliveAudio();scheduleDarkCues(t);}
   var url=NATURE[Math.floor(Math.random()*NATURE.length)];var bg=document.getElementById('bsbg');var i=new Image();i.onload=function(){bg.src=url;};i.src=url;
   acquireWL();
   actMusic('piano-calm');
   _say('comenzamos','Comenzamos. Sigue mi voz.');
   tickB();
 }
-function stopBreath(){BS.running=false;_stopVoice();clearTimeout(BS.to);document.getElementById('bso').classList.remove('open');releaseWL();if(_breathMusic){try{stopMusic();}catch(e){}_breathMusic=false;}if(BS.tech)finish(BS.tech.name,'respiracion',3,20);}
+function stopBreath(){BS.running=false;_stopVoice();clearTimeout(BS.to);document.getElementById('bso').classList.remove('open');releaseWL();stopKeepAlive();if(_breathMusic){try{stopMusic();}catch(e){}_breathMusic=false;}if(BS.tech)finish(BS.tech.name,'respiracion',3,20);}
 window.stopBreath=stopBreath;
 var _M_ON="<svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V6l10-2v10'/><circle cx='6' cy='18' r='2.6'/><circle cx='16' cy='16' r='2.6'/></svg>",_M_OFF="<svg viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V6l10-2v6'/><circle cx='6' cy='18' r='2.6'/><path d='M3 3l18 18'/></svg>";
 function togBreathMusic(){var b=document.getElementById('bmute');if(CurAudio){stopMusic();_breathMusic=false;if(b)b.innerHTML=_M_OFF;}else{try{playTrack('piano-calm');_breathMusic=true;if(b)b.innerHTML=_M_ON;}catch(e){}}}
@@ -857,7 +951,10 @@ function tickB(){
   var ring=document.getElementById('bc-ring'),ring2=document.getElementById('bc-ring2');
   if(p.t==='hold'){ring.classList.add('active');ring2.classList.add('active');}
   else{ring.classList.remove('active');ring2.classList.remove('active');}
-  ph.textContent=p.n;(function(){var k=_pkey(p.n);if(k)_say(k,p.n);else _speak(p.n);})();rd.textContent='Resp '+(BS.cycle+1)+' / '+t.cycles+(t.rounds?' · R'+BS.round:'');
+  ph.textContent=p.n;(function(){var k=_pkey(p.n);if(k)_say(k,p.n);else _speak(p.n);})();
+  // Haptic cue per phase — lets you practise with eyes closed.
+  if(_hapticOn){if(p.t==='inhale')vib(35);else if(p.t==='exhale')vib(90);else vib([25,60,25]);}
+  rd.textContent='Resp '+(BS.cycle+1)+' / '+t.cycles+(t.rounds?' · R'+BS.round:'');
   if(p.d>2){var cs=Math.round(p.d);(function cdd(){if(!BS.running)return;cn.textContent=cs;if(cs<=0){advB();return;}cs--;BS.to=setTimeout(cdd,1000);})();}
   else{cn.textContent='';BS.to=setTimeout(advB,p.d*1000);}
 }
@@ -1332,13 +1429,153 @@ function tip(msg){var t=document.getElementById('toast');t.textContent=msg;t.cla
 function om(id){document.getElementById(id).classList.add('open');}
 function cm(id){document.getElementById(id).classList.remove('open');}
 var wl=null;
-function acquireWL(){if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(function(w){wl=w;}).catch(function(){});}
+function acquireWL(){if(typeof _wakeOn!=='undefined'&&!_wakeOn)return;if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(function(w){wl=w;}).catch(function(){});}
 function releaseWL(){if(wl){wl.release();wl=null;}}
 function vib(p){if(navigator.vibrate)navigator.vibrate(p);}
 function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('inspi-theme',t);}
 
 // PUBLIC
+/* ---------- Modo noche, pantalla apagada y patrones propios ---------- */
+
+// --- Luz roja (protege la melatonina) ---
+var _redOn=localStorage.getItem('inspi-red')==='1';
+function applyRed(){document.body.classList.toggle('redmode',_redOn);var b=document.getElementById('tgl-red');if(b)b.classList.toggle('on',_redOn);}
+function toggleRed(){_redOn=!_redOn;localStorage.setItem('inspi-red',_redOn?'1':'0');applyRed();}
+
+// --- Mantener pantalla encendida ---
+// Reutiliza el wake lock que ya existía (acquireWL/releaseWL); aquí solo se
+// añade la preferencia del usuario. Por defecto activado, como era antes.
+var _wakeOn=localStorage.getItem('inspi-wake')!=='0';
+function toggleWake(){_wakeOn=!_wakeOn;localStorage.setItem('inspi-wake',_wakeOn?'1':'0');var b=document.getElementById('tgl-wake');if(b)b.classList.toggle('on',_wakeOn);if(!_wakeOn)releaseWL();else acquireWL();}
+
+// --- Práctica a pantalla apagada: tonos pre-programados en la línea de audio ---
+// Los timers de JS se frenan con la pantalla apagada, pero el audio programado
+// en el reloj de Web Audio sigue sonando con precisión. Por eso se agenda entero.
+var _darkOn=localStorage.getItem('inspi-dark')==='1',_silentEl=null;
+function toggleDarkPractice(){_darkOn=!_darkOn;localStorage.setItem('inspi-dark',_darkOn?'1':'0');var b=document.getElementById('tgl-dark');if(b)b.classList.toggle('on',_darkOn);}
+function cueTone(at,freq,dur,vol){
+  try{var ac=getAC();var o=ac.createOscillator(),g=ac.createGain();
+    o.type='sine';o.frequency.value=freq;
+    g.gain.setValueAtTime(0,at);
+    g.gain.linearRampToValueAtTime(vol||0.22,at+0.04);
+    g.gain.exponentialRampToValueAtTime(0.0001,at+dur);
+    o.connect(g);g.connect(mGain||ac.destination);
+    o.start(at);o.stop(at+dur+0.05);
+  }catch(e){}
+}
+// Agenda todos los tonos de la sesión de una vez.
+function scheduleDarkCues(t){
+  if(!_darkOn||!t)return;
+  var ac=getAC();var at=ac.currentTime+0.15;
+  var rounds=t.rounds||1;
+  for(var r=0;r<rounds;r++){
+    for(var c=0;c<t.cycles;c++){
+      for(var i=0;i<t.phases.length;i++){
+        var p=t.phases[i];
+        // Grave = exhalar, agudo = inhalar, doble = retención
+        var f=p.t==='inhale'?660:(p.t==='exhale'?330:495);
+        cueTone(at,f,Math.min(0.3,p.d*0.5));
+        at+=p.d;
+      }
+    }
+    if(t.ret){cueTone(at,247,0.5);at+=t.ret.d;}
+    if(t.rec){cueTone(at,392,0.4);at+=t.rec.d;}
+  }
+  cueTone(at,523,0.8,0.28); // final
+}
+function keepAliveAudio(){
+  // Un audio en marcha permite que el sonido siga con la pantalla bloqueada.
+  try{ if(_silentEl)return;
+    var ac=getAC(); if(!mGain){mGain=ac.createGain();mGain.gain.value=0.32;}
+    var dest=ac.createMediaStreamDestination();mGain.connect(dest);
+    _silentEl=new Audio();_silentEl.playsInline=true;_silentEl.loop=true;_silentEl.srcObject=dest.stream;
+    _silentEl.play().catch(function(){});
+    if('mediaSession' in navigator){
+      navigator.mediaSession.metadata=new MediaMetadata({title:'Sesión de respiración',artist:'INSPIRAPP'});
+    }
+  }catch(e){}
+}
+function stopKeepAlive(){if(_silentEl){try{_silentEl.pause();}catch(e){}_silentEl=null;}}
+
+// --- Patrones propios (lo que Breathwrk no tiene) ---
+function loadCustoms(){try{return JSON.parse(localStorage.getItem('inspi-customs')||'[]');}catch(e){return [];}}
+function saveCustoms(a){localStorage.setItem('inspi-customs',JSON.stringify(a));}
+function buildTech(o){
+  var ph=[];
+  if(o.inh>0)ph.push({n:'Inhala',d:o.inh,t:'inhale'});
+  if(o.h1>0)ph.push({n:'Aguanta',d:o.h1,t:'hold'});
+  if(o.exh>0)ph.push({n:'Exhala',d:o.exh,t:'exhale'});
+  if(o.h2>0)ph.push({n:'Aguanta',d:o.h2,t:'hold'});
+  return {id:o.id||'custom',name:o.name||'Mi patrón',e:'🌬️',cat:'calma',
+    desc:o.inh+'-'+o.h1+'-'+o.exh+'-'+o.h2+' · '+o.cycles+' ciclos',
+    phases:ph,cycles:o.cycles,tip:o.tip||'Tu patrón personalizado. Respira por la nariz y mantén el ritmo cómodo: si te falta el aire, baja los segundos.'};
+}
+function runTech(t){
+  var i=-1;for(var k=0;k<BREATHS.length;k++)if(BREATHS[k].id===t.id)i=k;
+  if(i>=0)BREATHS[i]=t;else BREATHS.push(t);
+  startBreath(t.id);
+}
+function renderCustoms(){
+  var el=document.getElementById('custom-list');if(!el)return;
+  var cs=loadCustoms();
+  el.innerHTML=cs.length?cs.map(function(c,i){
+    return '<div class="cr" style="background:var(--surface);border:1px solid var(--br);border-radius:14px;padding:12px 14px;margin-bottom:8px">'+
+      '<div style="flex:1;cursor:pointer" onclick="App.runCustom('+i+')"><div style="font-weight:700;font-size:14px;color:var(--tx)">'+c.name+'</div>'+
+      '<div style="font-size:11.5px;color:var(--tx2)">'+c.inh+'-'+c.h1+'-'+c.exh+'-'+c.h2+' · '+c.cycles+' ciclos · '+Math.round((c.inh+c.h1+c.exh+c.h2)*c.cycles/60*10)/10+' min</div></div>'+
+      '<button onclick="App.delCustom('+i+')" style="background:none;border:none;color:var(--tx2);font-size:16px;cursor:pointer;padding:4px 8px">✕</button></div>';
+  }).join(''):'<div style="font-size:12px;color:var(--tx2);padding:4px 0 8px">Aún no has creado ninguno.</div>';
+}
+function customPreview(){
+  var g=function(id){return parseFloat(document.getElementById(id).value)||0;};
+  var tot=(g('cp-inh')+g('cp-h1')+g('cp-exh')+g('cp-h2'))*g('cp-cyc');
+  var el=document.getElementById('cp-prev');
+  if(el)el.textContent=g('cp-inh')+'-'+g('cp-h1')+'-'+g('cp-exh')+'-'+g('cp-h2')+'  ·  '+Math.round(tot/60*10)/10+' min';
+}
+function saveCustom(){
+  var g=function(id){return parseFloat(document.getElementById(id).value)||0;};
+  var name=(document.getElementById('cp-name').value||'').trim()||'Mi patrón';
+  if(g('cp-inh')<=0&&g('cp-exh')<=0){tip('Pon al menos inhalar y exhalar');return;}
+  var cs=loadCustoms();
+  cs.push({name:name,inh:g('cp-inh'),h1:g('cp-h1'),exh:g('cp-exh'),h2:g('cp-h2'),cycles:g('cp-cyc')||10});
+  saveCustoms(cs);renderCustoms();tip('Patrón guardado');
+}
+function runCustom(i){
+  var c=loadCustoms()[i];if(!c)return;
+  cm('mo-custom');
+  runTech(buildTech({id:'custom-'+i,name:c.name,inh:c.inh,h1:c.h1,exh:c.exh,h2:c.h2,cycles:c.cycles}));
+}
+function delCustom(i){var cs=loadCustoms();cs.splice(i,1);saveCustoms(cs);renderCustoms();}
+function tryCustom(){
+  var g=function(id){return parseFloat(document.getElementById(id).value)||0;};
+  cm('mo-custom');
+  runTech(buildTech({id:'custom-try',name:(document.getElementById('cp-name').value||'Mi patrón'),
+    inh:g('cp-inh'),h1:g('cp-h1'),exh:g('cp-exh'),h2:g('cp-h2'),cycles:g('cp-cyc')||10}));
+}
+
+// --- Generador de sesión (inspirado en Down Dog: nunca dos iguales) ---
+var GEN={goal:'calma',min:5};
+function setGenGoal(g){GEN.goal=g;document.querySelectorAll('#gen-goal .chip').forEach(function(c){c.classList.toggle('on',c.dataset.g===g);});}
+function setGenMin(m){GEN.min=m;document.querySelectorAll('#gen-min .chip').forEach(function(c){c.classList.toggle('on',+c.dataset.m===m);});}
+function generateSession(){
+  var r=function(a,b){return Math.round((a+Math.random()*(b-a))*2)/2;};
+  var o,name;
+  if(GEN.goal==='calma'){o={inh:r(4,5),h1:0,exh:r(6,8),h2:0};name='Calma generada';}
+  else if(GEN.goal==='dormir'){o={inh:4,h1:r(4,7),exh:r(7,9),h2:0};name='Sueño generado';}
+  else if(GEN.goal==='foco'){o={inh:r(4,5),h1:r(3,5),exh:r(4,6),h2:r(2,4)};name='Foco generado';}
+  else {o={inh:r(2,3),h1:0,exh:r(2,3),h2:0};name='Energía generada';}
+  var per=o.inh+o.h1+o.exh+o.h2;
+  o.cycles=Math.max(4,Math.round(GEN.min*60/per));
+  o.id='generated';o.name=name;
+  o.tip='Sesión generada para "'+GEN.goal+'" de '+GEN.min+' min. Cada vez que la generas, el ritmo cambia un poco: así tu cuerpo no se acostumbra y la práctica no se hace monótona.';
+  cm('mo-custom');
+  runTech(buildTech(o));
+}
+
 window.App={
+  toggleRed:toggleRed,toggleWake:toggleWake,toggleDarkPractice:toggleDarkPractice,
+  openCustom:function(){om('mo-custom');renderCustoms();customPreview();},
+  saveCustom:saveCustom,runCustom:runCustom,delCustom:delCustom,tryCustom:tryCustom,
+  customPreview:customPreview,setGenGoal:setGenGoal,setGenMin:setGenMin,generateSession:generateSession,
   go:go,startBreath:startBreath,stopBreath:stopBreath,skipPhase:skipPhase,
   startYoga:startYoga,stopYoga:stopYoga,nextPose:nextPose,prevPose:prevPose,togYogaAudio:togYogaAudio,
   openMed:openMed,setMedDur:setMedDur,startMed:startMed,stopMed:stopMed,
@@ -1380,6 +1617,10 @@ window.startBreath=startBreath;window.startYoga=startYoga;
   nextFact();setInterval(nextFact,12000);
   renderBreaths();renderYoga();renderProtocols();renderBadges();renderCold();renderRetos();renderPillars();renderPlan30();applyPremiumGates();
   updateUI();
+  // Night-mode / screen preferences
+  applyRed();
+  (function(){var d=document.getElementById('tgl-dark');if(d)d.classList.toggle('on',_darkOn);
+   var w=document.getElementById('tgl-wake');if(w)w.classList.toggle('on',_wakeOn);})();
   if(!localStorage.getItem('inspi-welcomed')){setTimeout(function(){om('mo-welcome');},600);}
   checkDailyNotif();
   document.querySelectorAll('.mo').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});});
