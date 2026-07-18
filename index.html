@@ -195,6 +195,16 @@ select{appearance:none;background:var(--bg2);border:1.5px solid var(--br);border
 .tgl span{display:block;width:21px;height:21px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .tgl.on{background:var(--ac)}
 .tgl.on span{transform:translateX(19px)}
+/* Pantalla de recompensa tras cada sesión */
+.rw-ring{width:82px;height:82px;border-radius:50%;border:1.5px solid rgba(58,125,87,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;animation:rwPulse 2.2s ease-in-out infinite}
+.rw-ring2{width:60px;height:60px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(58,125,87,.35)}
+@keyframes rwPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.07);opacity:1}}
+.rw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rw-stat{background:var(--s2);border:1px solid var(--br);border-radius:14px;padding:12px 6px}
+.rw-hero{background:rgba(58,125,87,.12);border-color:rgba(58,125,87,.4)}
+.rw-v{font-size:22px;font-weight:700;color:var(--tx);line-height:1}
+.rw-hero .rw-v{color:var(--ac)}
+.rw-l{font-size:9.5px;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
 /* Red-light overlay — kills blue/green light to protect melatonin */
 #redfilter{position:fixed;inset:0;z-index:99999;pointer-events:none;background:#ff2200;mix-blend-mode:multiply;display:none}
 body.redmode #redfilter{display:block}
@@ -559,7 +569,28 @@ body.redmode{filter:brightness(.82)}
   </div>
 </div>
 
-<div class="mo" id="mo-mood"
+<div class="mo" id="mo-reward">
+  <div class="md"><div class="mh2"></div>
+    <div class="mb" style="text-align:center;padding-top:6px">
+      <div class="rw-ring"><div class="rw-ring2"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--tx);margin-bottom:3px">Sesión completada</div>
+      <div id="rw-name" style="font-size:13px;color:var(--tx2);margin-bottom:18px"></div>
+      <div class="rw-grid">
+        <div class="rw-stat rw-hero"><div class="rw-v" id="rw-streak">0</div><div class="rw-l">días seguidos</div></div>
+        <div class="rw-stat"><div class="rw-v" id="rw-sess">0</div><div class="rw-l">sesiones</div></div>
+        <div class="rw-stat"><div class="rw-v" id="rw-min">0</div><div class="rw-l">minutos</div></div>
+      </div>
+      <div style="margin-top:16px;text-align:left">
+        <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--tx2);margin-bottom:5px"><span>Nivel <b id="rw-lvl" style="color:var(--ac)">1</b></span><span id="rw-xp">0 / 100 XP</span></div>
+        <div class="xp-bar"><div class="xp-fill" id="rw-xpfill" style="width:0%"></div></div>
+      </div>
+      <div id="rw-msg" style="font-size:12.5px;color:var(--tx2);margin-top:16px;line-height:1.5"></div>
+      <button class="bf" onclick="App.cm('mo-reward')" style="width:100%;margin-top:18px">Continuar</button>
+    </div>
+  </div>
+</div>
+
+<div class="mo" id="mo-mood">
   <div class="md"><div class="mh2"></div>
     <div class="mh"><div class="mt">¿Cómo te sientes?</div></div>
     <div class="mb">
@@ -1146,7 +1177,27 @@ function finish(name,type,minutes,xpGain){
   S.history=S.history||[];pending={name:name,type:type,minutes:minutes,date:new Date().toISOString()};saveS();updateUI();
   document.getElementById('msn').textContent=name;om('mo-mood');
 }
-function saveMood(v){cm('mo-mood');if(v>0)S.lastMood=v;if(pending){pending.mood=v;S.history.unshift(pending);if(S.history.length>50)S.history.pop();pending=null;saveS();}updateUI();tip('¡Sesión guardada! +1 día de racha');checkBadges();}
+function saveMood(v){cm('mo-mood');if(v>0)S.lastMood=v;var nm=pending&&pending.name;if(pending){pending.mood=v;S.history.unshift(pending);if(S.history.length>50)S.history.pop();pending=null;saveS();}updateUI();checkBadges();showReward(nm);}
+
+// Momento de máxima satisfacción: es donde mejor entra la racha.
+// Es lo que hace volver mañana.
+function showReward(name){
+  var lvl=calcLevel(S.xp||0), cur=xpInLevel(S.xp||0), size=xpLevelSize(S.xp||0);
+  var set=function(id,val){var e=document.getElementById(id);if(e)e.textContent=val;};
+  set('rw-name',name||'');
+  set('rw-streak',S.streak||0);
+  set('rw-sess',S.sessions||0);
+  set('rw-min',Math.round(S.totalMin||0));
+  set('rw-lvl',lvl);
+  set('rw-xp',cur+' / '+size+' XP');
+  var f=document.getElementById('rw-xpfill');if(f)f.style.width=Math.min(100,Math.round(cur/size*100))+'%';
+  var msg='';
+  if((S.streak||0)>1)msg='Llevas '+S.streak+' días seguidos. Vuelve mañana y no rompas la cadena.';
+  else msg='Primer día de tu racha. Lo difícil no es empezar: es volver mañana.';
+  set('rw-msg',msg);
+  vib([40,80,40,80,150]);
+  om('mo-reward');
+}
 
 // BADGES
 function checkBadges(){
