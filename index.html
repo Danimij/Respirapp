@@ -278,7 +278,7 @@ body.redmode{filter:brightness(.82)}
             <div style="font-size:10px;color:rgba(255,255,255,.75)">Días</div>
           </div>
         </div>
-        <button onclick="App.openUnlock()" style="width:100%;background:#fff;color:var(--ac);border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">Desbloquear — 9,99€</button>
+        <button onclick="App.openUnlock()" style="width:100%;background:#fff;color:var(--ac);border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">Desbloquear — 4,99€</button>
         <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:8px">Pago único · Sin suscripción</div>
       </div>
     </div>
@@ -328,7 +328,7 @@ body.redmode{filter:brightness(.82)}
       <div style="font-size:28px;margin-bottom:6px"><svg viewBox='0 0 24 24' width='1em' height='1em' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' style='vertical-align:-.15em'><rect x='5' y='11' width='14' height='9' rx='2'/><path d='M8 11V8a4 4 0 0 1 8 0v3'/></svg></div>
       <div style="font-weight:700;font-size:14px;color:var(--tx);margin-bottom:5px">Plan Premium</div>
       <div style="font-size:12px;color:var(--tx2);margin-bottom:12px">30 días de hábitos con ciencia detrás. Desbloquea con INSPIRAPP Premium.</div>
-      <button class="bf" onclick="App.openUnlock()" style="width:100%">Desbloquear — 9,99€</button>
+      <button class="bf" onclick="App.openUnlock()" style="width:100%">Desbloquear — 4,99€</button>
     </div>
     <div id="plan30-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px"></div>
     <div id="plan30-detail" style="display:none;background:var(--surface);border-radius:14px;padding:14px;margin-top:4px;border:1.5px solid var(--br)"></div>
@@ -351,7 +351,7 @@ body.redmode{filter:brightness(.82)}
       <div style="font-size:32px;margin-bottom:8px"><svg viewBox='0 0 24 24' width='1em' height='1em' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' style='vertical-align:-.15em'><rect x='5' y='11' width='14' height='9' rx='2'/><path d='M8 11V8a4 4 0 0 1 8 0v3'/></svg></div>
       <div style="font-weight:700;font-size:15px;color:var(--tx);margin-bottom:6px">Academia Premium</div>
       <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">12 lecciones sobre los 8 pilares del biohacking con ciencia detrás de cada una. Acceso de por vida.</div>
-      <button class="bf" onclick="App.openUnlock()" style="width:100%;margin-bottom:8px">Desbloquear — 9,99€</button>
+      <button class="bf" onclick="App.openUnlock()" style="width:100%;margin-bottom:8px">Desbloquear — 4,99€</button>
       <div style="font-size:11px;color:var(--tx2)">Pago único · Sin suscripción · Acceso inmediato</div>
     </div>
     <div id="lessons-list"></div>
@@ -424,7 +424,15 @@ body.redmode{filter:brightness(.82)}
         <span style="color:var(--ac)">✓</span> Plan 30 Días interactivo<br>
         <span style="color:var(--ac)">✓</span> Pago único · Sin suscripción · Sin cobros sorpresa
       </div>
-      <a href="https://danimij.gumroad.com/l/wpsxro" target="_blank" class="bf" style="display:block;width:100%;margin-bottom:14px;text-decoration:none;text-align:center">Comprar por 9,99€ →</a>
+      <a href="https://danimij.gumroad.com/l/wpsxro" target="_blank" class="bf" style="display:block;width:100%;margin-bottom:10px;text-decoration:none;text-align:center">Comprar por 4,99€ →</a>
+      <a href="https://danimij.gumroad.com/l/pack" target="_blank" style="display:flex;align-items:center;gap:12px;background:var(--s2);border:1.5px solid var(--ac);border-radius:14px;padding:13px 15px;text-decoration:none;margin-bottom:14px">
+        <span style="flex:1">
+          <span style="display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);font-weight:700;margin-bottom:2px">Las tres apps</span>
+          <span style="display:block;font-weight:700;font-size:14px;color:var(--tx)">Pack completo — 14,99€</span>
+          <span style="display:block;font-size:11.5px;color:var(--tx2)">INSPIRAPP + FACEO + FLUO · ahorras 5€</span>
+        </span>
+        <span style="flex-shrink:0;color:var(--ac);font-size:18px">›</span>
+      </a>
       <div style="font-size:12px;color:var(--tx2);margin-bottom:10px">¿Ya tienes un código? Introdúcelo aquí:</div>
       <div style="display:flex;gap:8px">
         <input id="unlock-input" type="text" placeholder="INSPR-XXXX-XXXX" style="flex:1;padding:10px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--bg2);color:var(--tx);font-size:13px;font-family:inherit" oninput="this.value=this.value.toUpperCase()">
