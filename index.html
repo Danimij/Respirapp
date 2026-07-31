@@ -291,6 +291,14 @@ body.redmode{filter:brightness(.82)}
 <!-- RESPIRAR -->
 <section id="sc-respirar" class="sc">
   <div class="sec">
+    <div onclick="App.openCheck()" style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--br);border-left:3px solid var(--ac);border-radius:16px;padding:14px 16px;margin-bottom:14px;cursor:pointer;box-shadow:var(--sh)">
+      <span style="flex-shrink:0;width:38px;height:38px;border-radius:11px;background:var(--bg2);display:flex;align-items:center;justify-content:center;color:var(--ac)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+      <span style="flex:1">
+        <span style="display:block;font-weight:700;font-size:14.5px;color:var(--tx)">¿Qué necesitas ahora?</span>
+        <span style="display:block;font-size:12px;color:var(--tx2)">Responde y te digo qué técnica te va mejor</span>
+      </span>
+      <span style="flex-shrink:0;color:var(--tx2);font-size:18px">›</span>
+    </div>
     <div class="st">Técnicas de Respiración</div>
     <div class="chips" id="bfilt">
       <div class="chip on" data-f="all">Todas</div>
@@ -588,6 +596,8 @@ body.redmode{filter:brightness(.82)}
   </div>
 </div>
 
+<div class="mo" id="mo-check"><div class="md"><div class="mh2"></div><div id="check-body" style="padding:4px 2px 8px"></div></div></div>
+
 <div class="mo" id="mo-reward">
   <div class="md"><div class="mh2"></div>
     <div class="mb" style="text-align:center;padding-top:6px">
@@ -782,6 +792,76 @@ var LESSONS=[
   {id:'l11',title:'El Sueño · Base de Todo',icon:'😴',sub:'La limpieza y reparación nocturna',content:'<b>Qué es</b><br>El sueño es el pilar sobre el que se apoyan los demás. Dormir mal sabotea hormonas, ánimo, memoria, apetito e inmunidad.<br><br><b>La ciencia</b><br>En el sueño profundo, el sistema glinfático elimina residuos del cerebro, incluida la beta-amiloide. Una sola noche de privación aumenta la beta-amiloide medible (Shokri-Kojori, PNAS 2018). Dormir menos de 7 h de forma crónica se asocia a más riesgo cardiovascular, metabólico e inmunitario. La regularidad (acostarse y levantarse a la misma hora) puede predecir la mortalidad incluso mejor que la duración (Windred, Sleep 2023).<br><br><b>Cómo aplicarlo</b><br>1) Horario regular, también el fin de semana. 2) Luz por la mañana y oscuridad por la noche (pilar Luz). 3) Dormitorio fresco y oscuro. 4) Sin pantallas ni comida pesada 1-2 h antes; cafeína solo por la mañana. 5) Respiración 4-7-8 en la cama.<br><br><i>Shokri-Kojori, PNAS 2018 · Walker, Why We Sleep · Windred, Sleep 2023</i>',keys:['La regularidad importa incluso más que la duración','El cerebro se limpia en sueño profundo','Fresco y oscuro para dormir','Sin pantallas ni cafeína a última hora']},
   {id:'l12',title:'Plan de 30 Días',icon:'📅',sub:'Semana a semana',content:'Semana 1 — Luz y Circadiano: sol matutino sin gafas, bombillas ámbar de noche, cena antes de las 19:30h, grounding 20 min, coherencia cardíaca 5 min tras el sol. Semana 2 — Frío y Hormesis: ducha fría progresiva (30s→90s), Wim Hof en ayunas antes de la ducha, desayuno proteico en la 1ª hora. Semana 3 — Nutrición y Rendimiento: ayuno 16:8, entrenamiento en ayunas, Kapalabhati sustituyendo el café, router apagado de noche. Semana 4 — Integración: diseña tu protocolo mañana y noche definitivo, auditoría del entorno, comparte una técnica con alguien.',keys:['Semana 1: Luz · Semana 2: Frío · Semana 3: Nutrición','No intentes todo el día 1 — progresión es la clave','Mide el BOLT cada 7 días para ver tu progreso']}
 ];
+
+// AUTOEVALUACIÓN: qué necesitas ahora -> técnica + pilar recomendados
+var CHECK_Q=[
+  { q:'¿Cómo estás ahora mismo?',
+    o:[ {t:'Nervioso o con ansiedad', w:{calma:3}},
+        {t:'Con la mente acelerada', w:{calma:2,foco:1}},
+        {t:'Sin energía, apagado', w:{energia:3}},
+        {t:'Bien, quiero mantenerme', w:{coherencia:2}} ]},
+  { q:'¿Qué tal duermes últimamente?',
+    o:[ {t:'Bien', w:{}},
+        {t:'Me cuesta dormirme', w:{dormir:3}},
+        {t:'Me despierto por la noche', w:{dormir:2,calma:1}},
+        {t:'Duermo poco y mal', w:{dormir:3,calma:1}} ]},
+  { q:'¿Para qué es esta sesión?',
+    o:[ {t:'Calmarme ya', w:{calma:3}},
+        {t:'Prepararme para dormir', w:{dormir:3}},
+        {t:'Activarme y despertar', w:{energia:3}},
+        {t:'Concentrarme para trabajar', w:{foco:2,coherencia:1}} ]},
+  { q:'¿Cuánto tiempo tienes?',
+    o:[ {t:'1-2 minutos', w:{rapido:2}},
+        {t:'5 minutos', w:{}},
+        {t:'10 minutos o más', w:{largo:1}} ]},
+];
+// Cada necesidad -> técnica principal + pilar (lección) que la explica
+var CHECK_MAP={
+  calma:   { tec:'478',       pilar:'l10', msg:'Necesitas bajar revoluciones. La respiración 4-7-8 activa el nervio vago y calma en poco más de un minuto.' },
+  dormir:  { tec:'478',       pilar:'l11', msg:'Para dormir, la clave es alargar la exhalación. Hazla en la cama, a oscuras. Y recuerda: la regularidad importa más que las horas.' },
+  energia: { tec:'wim-hof',   pilar:'l5',  msg:'Para activarte, la respiración Wim Hof sube dopamina y noradrenalina durante horas. En tierra firme, nunca en agua.' },
+  foco:    { tec:'coherence', pilar:'l1',  msg:'Para concentrarte, la coherencia cardíaca a 5,5 sincroniza corazón y mente. 5 minutos antes de trabajar.' },
+  coherencia:{ tec:'coherence', pilar:'l1', msg:'Para mantenerte, la coherencia cardíaca es tu base diaria: 5 minutos que mejoran tu HRV en semanas.' },
+  rapido:  { tec:'phys-sigh', pilar:'l1',  msg:'Con poco tiempo, el suspiro fisiológico es lo más rápido que existe para cambiar tu estado: una o dos veces bastan.' },
+  largo:   { tec:'coherence', pilar:'l1',  msg:'Con tiempo, la coherencia cardíaca sostenida es la que más te aporta a medio plazo.' },
+};
+var CS={ i:0, sc:{} };
+function openCheck(){ CS={i:0,sc:{}}; renderCheck(); om('mo-check'); }
+function renderCheck(){
+  var b=document.getElementById('check-body');
+  if(CS.i<CHECK_Q.length){
+    var q=CHECK_Q[CS.i];
+    b.innerHTML='<div style="display:flex;gap:4px;margin-bottom:16px">'+
+      CHECK_Q.map(function(_,i){return '<span style="flex:1;height:3px;border-radius:2px;background:'+(i<CS.i?'var(--ac)':'var(--br)')+'"></span>';}).join('')+'</div>'+
+      '<div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;font-weight:600;margin-bottom:4px">'+q.q+'</div>'+
+      '<div style="font-size:11.5px;color:var(--tx2);margin-bottom:16px">Pregunta '+(CS.i+1)+' de '+CHECK_Q.length+'</div>'+
+      q.o.map(function(o,oi){
+        return '<button onclick="App.answerCheck('+oi+')" style="display:block;width:100%;text-align:left;background:var(--s2);border:1.5px solid var(--br);border-radius:14px;padding:14px 16px;margin-bottom:9px;cursor:pointer;font-family:\'Inter\',sans-serif;font-size:14px;color:var(--tx)">'+o.t+'</button>';
+      }).join('')+
+      '<button class="xb" onclick="App.cm(\'mo-check\')" style="position:absolute;top:16px;right:16px">✕</button>';
+  } else {
+    // calcular necesidad dominante
+    var best=null,max=-1;
+    Object.keys(CS.sc).forEach(function(k){ if(CS.sc[k]>max){max=CS.sc[k];best=k;} });
+    if(!best) best='coherencia';
+    var m=CHECK_MAP[best];
+    var tec=BREATHS.filter(function(x){return x.id===m.tec;})[0]||BREATHS[0];
+    var pil=LESSONS.filter(function(x){return x.id===m.pilar;})[0];
+    b.innerHTML='<div style="text-align:center;padding-top:4px">'+
+      '<div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);font-weight:700;margin-bottom:8px">Tu recomendación</div>'+
+      '<div style="font-family:\'Cormorant Garamond\',serif;font-size:26px;font-weight:600;margin-bottom:6px">'+tec.name+'</div>'+
+      '<p style="font-size:13.5px;color:var(--tx2);line-height:1.55;margin-bottom:18px;text-align:left">'+m.msg+'</p>'+
+      '<button class="bf" onclick="App.cm(\'mo-check\');App.startBreath(\''+tec.id+'\')" style="width:100%;margin-bottom:10px">Empezar ahora →</button>'+
+      (pil? '<button class="bf alt" onclick="App.cm(\'mo-check\');App.go(\'aprende\');App.openLesson(\''+pil.id+'\')" style="width:100%;margin:0">Aprender el porqué · '+pil.title+'</button>':'')+
+      '<button style="background:none;border:none;color:var(--tx2);font-size:12px;margin-top:14px;cursor:pointer;text-decoration:underline" onclick="App.openCheck()">Repetir el test</button>'+
+      '</div>';
+  }
+}
+function answerCheck(oi){
+  var w=CHECK_Q[CS.i].o[oi].w;
+  Object.keys(w).forEach(function(k){ CS.sc[k]=(CS.sc[k]||0)+w[k]; });
+  CS.i++; renderCheck();
+}
 
 // PREMIUM CODES — generated for Gumroad delivery
 var PREMIUM_CODES=['INSPR-A3K7-M2PX','INSPR-B8L1-N9QZ','INSPR-C4W5-P7RT','INSPR-D2J6-K3YV','INSPR-E9H0-F6UW','INSPR-F1M4-G8SD','INSPR-G7N2-H1LC','INSPR-H5P8-J4BT','INSPR-I3Q9-K7AE','INSPR-J6R1-L2NF','INSPR-K8S3-M5OG','INSPR-L2T7-N0PH','INSPR-M9U4-O3QI','INSPR-N1V6-P8RJ','INSPR-O7W2-Q1SK','INSPR-P4X8-R6TL','INSPR-Q0Y3-S2UM','INSPR-R5Z9-T7VN','INSPR-S1A4-U3WO','INSPR-T6B0-V8XP','INSPR-U2C7-W4YQ','INSPR-V8D3-X9ZR','INSPR-W5E1-Y2AS','INSPR-X3F6-Z7BT','INSPR-Y9G2-A4CU','INSPR-Z1H8-B6DV','INSPR-A7I4-C3EW','INSPR-B2J9-D8FX','INSPR-C6K5-E1GY','INSPR-D4L0-F7HZ','INSPR-E8M3-G2IA','INSPR-F1N7-H9JB','INSPR-G5O2-I4KC','INSPR-H3P6-J0LD','INSPR-I9Q1-K5ME','INSPR-J4R8-L3NF','INSPR-K0S5-M7OG','INSPR-L6T2-N1PH','INSPR-M3U9-O6QI','INSPR-N8V4-P2RJ','INSPR-O2W0-Q9SK','INSPR-P7X6-R4TL','INSPR-Q1Y3-S8UM','INSPR-R9Z7-T1VN','INSPR-S4A2-U5WO','INSPR-T0B8-V3XP','INSPR-U6C4-W9YQ','INSPR-V3D1-X6ZR','INSPR-W8E7-Y0AS','INSPR-X2F4-Z5BT'];
@@ -1656,6 +1736,7 @@ window.App={
   openSettings:function(){om('mo-settings');},
   cm:cm,saveMood:saveMood,theme:setTheme,tip:tip,
   openLesson:openLesson,
+  openCheck:openCheck,answerCheck:answerCheck,
   completeLesson:function(id){S.lessonsDone=S.lessonsDone||[];if(!S.lessonsDone.includes(id)){S.lessonsDone.push(id);S.xp=(S.xp||0)+15;saveS();updateUI();tip('Lección completada! +15 XP');}cm('mo-lesson');renderLessons();renderPillars();},
   showPlan30Day:showPlan30Day,
   completePlan30Day:completePlan30Day,
