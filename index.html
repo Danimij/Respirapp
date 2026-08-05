@@ -291,6 +291,15 @@ body.redmode{filter:brightness(.82)}
 <!-- RESPIRAR -->
 <section id="sc-respirar" class="sc">
   <div class="sec">
+    <div onclick="App.openEmpieza()" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(75,156,114,.18),rgba(75,156,114,.05));border:1px solid var(--ac);border-radius:16px;padding:15px 16px;margin-bottom:14px;cursor:pointer;box-shadow:var(--sh)">
+      <span style="flex-shrink:0;width:40px;height:40px;border-radius:12px;background:rgba(75,156,114,.16);display:flex;align-items:center;justify-content:center;font-size:22px">🌱</span>
+      <span style="flex:1">
+        <span style="display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);font-weight:700;margin-bottom:2px">Nivel 1 · Inicial</span>
+        <span style="display:block;font-weight:700;font-size:15px;color:var(--tx)">Nivel inicial</span>
+        <span style="display:block;font-size:12px;color:var(--tx2)">Para quien no sabe respirar ni parar su cabeza. Te guío desde cero.</span>
+      </span>
+      <span style="flex-shrink:0;color:var(--ac);font-size:18px">›</span>
+    </div>
     <div onclick="App.openCheck()" style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--br);border-left:3px solid var(--ac);border-radius:16px;padding:14px 16px;margin-bottom:14px;cursor:pointer;box-shadow:var(--sh)">
       <span style="flex-shrink:0;width:38px;height:38px;border-radius:11px;background:var(--bg2);display:flex;align-items:center;justify-content:center;color:var(--ac)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
       <span style="flex:1">
@@ -527,6 +536,23 @@ body.redmode{filter:brightness(.82)}
   </div>
 </div>
 
+<!-- MODAL EMPIEZA AQUÍ (principiantes de cero) -->
+<div class="mo" id="mo-empieza">
+  <div class="md"><div class="mh2"></div>
+    <div class="mh"><div class="mt">🌱 Nivel inicial</div><button class="xb" onclick="App.cm('mo-empieza')">✕</button></div>
+    <div class="mb">
+      <p style="font-size:14.5px;color:var(--tx);line-height:1.6;margin-bottom:14px">¿Nunca has hecho esto? ¿Tu cabeza no para de dar vueltas? Perfecto: esto es justo para ti.</p>
+      <div style="background:var(--bg2);border-radius:14px;padding:15px 16px;margin-bottom:14px">
+        <p style="font-size:13.5px;color:#cbd8d3;line-height:1.65;margin-bottom:10px"><b style="color:var(--ac)">No vas a apagar tu mente.</b> Nadie puede, y no hace falta. Pensar es lo que hace el cerebro, como latir el corazón.</p>
+        <p style="font-size:13.5px;color:#cbd8d3;line-height:1.65;margin-bottom:10px">Solo vas a darle algo muy fácil que seguir: <b style="color:var(--ac)">tu respiración</b>. Inhalas por la nariz, sueltas por la boca un poco más largo. Ya está.</p>
+        <p style="font-size:13.5px;color:#cbd8d3;line-height:1.65">Los pensamientos vendrán. Cada vez que lo notes, vuelves al aire. <b style="color:var(--ac)">Ese "volver" es todo el ejercicio</b> — no lo haces mal, lo estás haciendo bien.</p>
+      </div>
+      <p style="font-size:12.5px;color:var(--tx2);margin-bottom:16px;text-align:center">Yo te guío con la voz. Solo siéntate cómodo y sigue el círculo. Dos minutos.</p>
+      <button class="bf" style="width:100%" onclick="App.cm('mo-empieza');App.startBreath('empieza')">Empezar · te guío</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL SETTINGS -->
 <div class="mo" id="mo-settings">
   <div class="md"><div class="mh2"></div>
@@ -715,6 +741,7 @@ body.redmode{filter:brightness(.82)}
 'use strict';
 
 var BREATHS=[
+  {id:'empieza',name:'Nivel inicial',e:'🌱',cat:'calma',desc:'¿Nunca lo has hecho o tu cabeza no para? Este es tu primer nivel. No hay que saber nada: solo seguir el aire.',phases:[{n:'Inhala por la nariz',d:4,t:'inhale'},{n:'Suelta por la boca',d:6,t:'exhale'}],cycles:10,tip:'Esto es para ti si nunca lo has hecho o si tu cabeza no para nunca. La verdad primero: NO vas a apagar tu mente, y no hace falta. Pensar es lo que hace el cerebro, como latir el corazón — no es un fallo. El truco no es dejar de pensar; es darle a tu mente algo muy fácil que seguir: el aire. Siéntate cómodo. Inhala por la nariz sin prisa (4s) y suelta por la boca despacio, un poco más largo (6s). Ya está, no hay más. Cuando te descubras pensando en otra cosa —y pasará muchas veces, a todo el mundo— no te enfades: solo vuelve a notar el aire. Ese "volver", una y otra vez, ES el ejercicio. No lo estás haciendo mal: lo estás haciendo. Con 2 minutos al día, en unos días, tu cabeza aprende a bajar el volumen.'},
   {id:'wim-hof',name:'Método Wim Hof',e:'🌬️',cat:'activacion',desc:'30 respiraciones profundas + retención sin aire. 3 rondas. Activa el sistema nervioso simpático.',phases:[{n:'Inhala',d:1.5,t:'inhale'},{n:'Exhala',d:1,t:'exhale'}],cycles:30,rounds:3,ret:{n:'Retención',d:90},rec:{n:'Recuperación',d:15},tip:'Cómo hacerlo: inhala profundo llenando pecho y barriga, exhala sin forzar. Repite 30 veces. En la exhala 30, aguanta sin aire hasta el primer impulso de respirar. Luego inhala profundo y aguanta 15s. Eso es 1 ronda. Notarás hormigueo en manos y pies — es normal. Dopamina +250%, norepinefrina +300%. (Kox et al., PNAS 2014)'},
   {id:'box',name:'Respiración en Cuadro',e:'⬛',cat:'calma',desc:'4-4-4-4: inhala, aguanta, exhala, aguanta. Técnica de Navy SEALs para mantener calma bajo presión.',phases:[{n:'Inhala',d:4,t:'inhale'},{n:'Aguanta',d:4,t:'hold'},{n:'Exhala',d:4,t:'exhale'},{n:'Aguanta',d:4,t:'hold'}],cycles:8,tip:'Imagina un cuadrado. Cada lado = 4 segundos. ↑ Inhala : → Aguanta lleno : ↓ Exhala : ← Aguanta vacío. Repite 8 veces (2 minutos). Úsala antes de una conversación difícil, en el atasco, en un examen, o cualquier momento de presión. Activa el parasimpático en 60 segundos.'},
   {id:'478',name:'4-7-8 Relajante',e:'😴',cat:'calma',desc:'El "tranquilizante natural". Inhala 4s, aguanta 7s, exhala 8s. Activa el nervio vago en 76 segundos.',phases:[{n:'Inhala',d:4,t:'inhale'},{n:'Aguanta',d:7,t:'hold'},{n:'Exhala',d:8,t:'exhale'}],cycles:4,tip:'Inhala por nariz 4s → aguanta 7s (esto es la clave: activa el parasimpático) → exhala por boca muy suave 8s, como viento. Repite 4 ciclos = 76 segundos. Ideal tumbado en la cama antes de dormir. Los 7s de retención bajan el cortisol casi al instante. Dr. Andrew Weil.'},
@@ -1384,7 +1411,11 @@ function go(id){
 
 // RENDER
 function renderBreaths(){
-  document.getElementById('blist').innerHTML=BREATHS.map(function(b){var lmap={activacion:'Activación',calma:'Calma',rendimiento:'Rendimiento'};return '<div class="card bcard" data-c="'+b.cat+'" onclick="startBreath(\''+b.id+'\')" ><div class="cbanner"><img src="'+breathImg(b.id)+'" alt="" loading="lazy"><span class="cbadge">'+lmap[b.cat]+'</span></div><div class="cr"><div class="ci">'+ico(b.e)+'</div><div class="cb"><div class="ct">'+b.name+'</div><div class="cd">'+b.desc+'</div></div></div></div>';}).join('');
+  var lvlMap={empieza:1,'phys-sigh':1,coherence:1,box:2,'478':2,buteyko:2,'wim-hof':3,tummo:3,kapalabhati:3};
+  var lvlName={1:'Nivel inicial',2:'Nivel intermedio',3:'Nivel avanzado'};
+  var lvlCol={1:'#4b9c72',2:'#c9a96e',3:'#c98a8a'};
+  var ordered=BREATHS.slice().sort(function(a,b){return (lvlMap[a.id]||2)-(lvlMap[b.id]||2);});
+  document.getElementById('blist').innerHTML=ordered.map(function(b){var lmap={activacion:'Activación',calma:'Calma',rendimiento:'Rendimiento'};var lv=lvlMap[b.id]||2;return '<div class="card bcard" data-c="'+b.cat+'" data-lv="'+lv+'" onclick="startBreath(\''+b.id+'\')" ><div class="cbanner"><img src="'+breathImg(b.id)+'" alt="" loading="lazy"><span class="cbadge">'+lmap[b.cat]+'</span><span class="cbadge" style="right:auto;left:10px;background:'+lvlCol[lv]+';color:#fff">'+lvlName[lv]+'</span></div><div class="cr"><div class="ci">'+ico(b.e)+'</div><div class="cb"><div class="ct">'+b.name+'</div><div class="cd">'+b.desc+'</div></div></div></div>';}).join('');
   document.querySelectorAll('#bfilt .chip').forEach(function(c){c.addEventListener('click',function(){document.querySelectorAll('#bfilt .chip').forEach(function(x){x.classList.remove('on');});c.classList.add('on');var f=c.dataset.f;document.querySelectorAll('.bcard').forEach(function(card){card.style.display=(f==='all'||card.dataset.c===f)?'':'none';});});});
 }
 function renderYoga(){
@@ -1735,6 +1766,7 @@ function generateSession(){
 window.App={
   toggleRed:toggleRed,toggleWake:toggleWake,toggleDarkPractice:toggleDarkPractice,
   openCustom:function(){om('mo-custom');renderCustoms();customPreview();},
+  openEmpieza:function(){om('mo-empieza');},
   saveCustom:saveCustom,runCustom:runCustom,delCustom:delCustom,tryCustom:tryCustom,
   customPreview:customPreview,setGenGoal:setGenGoal,setGenMin:setGenMin,generateSession:generateSession,
   go:go,startBreath:startBreath,stopBreath:stopBreath,skipPhase:skipPhase,
