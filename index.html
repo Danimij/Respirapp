@@ -1083,10 +1083,13 @@ function startBreath(id){
    var h=document.getElementById('bhaptic');if(h)h.classList.toggle('sel',_hapticOn);})();
   // Night / screen-off support
   acquireWL();
-  if(_darkOn){keepAliveAudio();scheduleDarkCues(t);}
   var url=NATURE[Math.floor(Math.random()*NATURE.length)];var bg=document.getElementById('bsbg');var i=new Image();i.onload=function(){bg.src=url;};i.src=url;
-  acquireWL();
+  // IMPORTANTE el orden: primero armamos el canal de audio (mGain + media stream),
+  // y DESPUÉS programamos los pitidos, para que salgan por el mismo canal que la
+  // música y sigan sonando con la pantalla bloqueada.
   actMusic('piano-calm');
+  keepAliveAudio();
+  if(_voiceOn)scheduleDarkCues(t); // pitidos de ritmo siempre que la voz esté activa
   _say('comenzamos','Comenzamos. Sigue mi voz.');
   tickB();
 }
@@ -1241,8 +1244,9 @@ function startMed(medId){
   document.getElementById('med-info').textContent=med.name;
   document.getElementById('med-sel').style.display='none';document.getElementById('med-running').style.display='';
   MED.running=true;MED.elapsed=0;MED.narration=null;MED._lastPhase=null;acquireWL();
-  if(_darkOn)keepAliveAudio(); // permite seguir la guía con la pantalla apagada
   actMusic('piano-calm');
+  keepAliveAudio(); // permite que la guía siga con la pantalla apagada
+  if(_voiceOn)scheduleMedCues(MED.dur); // pitidos de ritmo pre-programados (sobreviven al bloqueo)
   // Try a single continuous narration recording (audio/med-<id>.mp3). If present,
   // it becomes the guide and sets the duration; otherwise fall back to TTS cues.
   if(_voiceOn){try{var nar=new Audio('audio/med-'+med.id+'.mp3');
@@ -1255,18 +1259,11 @@ function startMed(medId){
     if(!MED.running)return;
     var circ=document.getElementById('med-circle');
     var cyc=MED.elapsed%10;
-    var phase=cyc<4?'in':(cyc<9?'out':'hold');
     document.getElementById('med-ph').textContent=cyc<4?'Inhala':(cyc<9?'Exhala':'Suelta');
     document.getElementById('med-cnt').textContent='';
     circ.className='med-circle'+(cyc<4?' in':' out');
-    // Señal sonora del ritmo: agudo al inhalar, grave al exhalar. Así se puede
-    // seguir con los ojos cerrados o la pantalla apagada, no solo mirando.
-    if(phase!==MED._lastPhase){
-      MED._lastPhase=phase;
-      if(_voiceOn && !MED.narration){
-        try{var f=phase==='in'?660:(phase==='out'?330:495);cueTone(getAC().currentTime+0.02,f,phase==='hold'?0.4:0.5,0.2);}catch(e){}
-      }
-    }
+    // El ritmo sonoro (inhala/exhala) va pre-programado en scheduleMedCues, para
+    // que suene aunque la pantalla esté bloqueada (los timers se pausan, el audio no).
     var pct=MED.elapsed/MED.dur*100;document.getElementById('med-bar').style.width=Math.min(100,pct)+'%';
     var rem=Math.max(0,MED.dur-MED.elapsed),m=Math.floor(rem/60),s=rem%60;
     document.getElementById('med-elapsed').textContent='Quedan '+m+':'+(s<10?'0':'')+s;
@@ -1707,6 +1704,17 @@ function scheduleDarkCues(t){
     if(t.rec){cueTone(at,392,0.4);at+=t.rec.d;}
   }
   cueTone(at,523,0.8,0.28); // final
+}
+// Pre-programa los pitidos de ritmo de la meditación (ciclo de 10s: inhala 0-3,
+// exhala 4-8, suelta 9). Pre-programado = suena con la pantalla bloqueada.
+function scheduleMedCues(dur){
+  var ac=getAC();var at=ac.currentTime+0.15;
+  for(var s=0;s<(dur||300);s++){
+    var cyc=s%10;
+    if(cyc===0)cueTone(at+s,660,0.5,0.2);        // inhala (agudo)
+    else if(cyc===4)cueTone(at+s,330,0.5,0.2);   // exhala (grave)
+    else if(cyc===9)cueTone(at+s,495,0.4,0.2);   // suelta (medio)
+  }
 }
 function keepAliveAudio(){
   // Un audio en marcha permite que el sonido siga con la pantalla bloqueada.
